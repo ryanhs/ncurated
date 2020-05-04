@@ -1,0 +1,17 @@
+{
+  "name": "@xprycker/curated",
+  "version": "1.0.0",
+  "description": "my curated list of packages most used for microservices",
+  "main": "src/index.js",
+  "repository": "https://github.com/ryanhs/node-curated",
+  "author": "ryanhs <mr.ryansilalahi@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=8.11"
+  },
+  "scripts": {
+    "start": "npm run node:version",
+    "test": "npm run node:version",
+    "node:version": "node --version"
+  }
+}

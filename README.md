@@ -1,5 +1,7 @@
 # Node Curated
 
+[![Build Status](https://travis-ci.com/ryanhs/node-curated.svg?branch=master)](https://travis-ci.com/ryanhs/node-curated)
+
 This is not a Framework per se. This more like just a curated list of nodejs packages.
 
 Example, in building microservices usually we face the situation that we know we need stream feature.
