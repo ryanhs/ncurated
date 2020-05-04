@@ -1,4 +1,4 @@
-# Node Curated
+# NCurated
 
 [![Build Status](https://travis-ci.com/ryanhs/node-curated.svg?branch=master)](https://travis-ci.com/ryanhs/node-curated)
 
