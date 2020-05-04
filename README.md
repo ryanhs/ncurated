@@ -37,4 +37,6 @@ Please feel free to use any framework to use. \*as long as its compatible :-)
 
 ## Requirements
 
-Although some of the packages, it can be running at least node 8.11. Its recommended to run it in current supported LTS version. (dubnium parhaps?).
+Although some of the packages, it can be running at as log as node 8.11.
+
+Its recommended to run it in current supported LTS version. (Dubnium parhaps?).
