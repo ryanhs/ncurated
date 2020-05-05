@@ -23,7 +23,7 @@ before_install:
   - sleep 60 # wait for kafka
 
   # install redis
-  - redis-cli keys *
+  - redis-cli keys \*
 
   # check kafka
   - kafkacat -b localhost:9092 -L
