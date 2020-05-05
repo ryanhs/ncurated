@@ -8,12 +8,12 @@ node_js:
 
 services:
   - docker
+  - redis-server
 
 addons:
   apt:
     packages:
     - kafkacat
-    - redis-server
     - redis-tools
 
 
