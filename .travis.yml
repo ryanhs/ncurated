@@ -1,14 +1,13 @@
 dist: bionic
-
 language: node_js
-
-services:
-  - docker
-
+cache: npm
 node_js:
 - "8.11"
 # - "10"
 # - "12"
+
+services:
+  - docker
 
 addons:
   apt:
@@ -16,9 +15,13 @@ addons:
     - kafkacat
 
 
-cache: npm
-
 before_install:
+  # install kafka
   - docker run -d -p 9092:9092 -p 2181:2181 -p 2888:2888 -p 3888:3888 mohamnag/kafka-zookeeper
+  - sleep 60 # wait for kafka
+
+  # check kafka
   - kafkacat -b localhost:9092 -L
+
+  # test
   - node --version
