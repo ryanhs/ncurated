@@ -1,0 +1,32 @@
+{
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "airbnb-base"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly",
+        "fetch": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "plugins": ["jest"],
+    "rules": {
+      "no-console": "off",
+      "no-trailing-spaces": "off",
+      "padded-blocks": "off",
+      "no-unused-vars": "warn",
+      "radix": "warn"
+    },
+    "overrides": [
+      {
+        "files": ["**/*.test.js"],
+        "extends": ["plugin:jest/recommended"]
+      }
+    ]
+}

@@ -1,11 +1,20 @@
+dist: bionic
+
 language: node_js
 
 node_js:
 - "8.11"
-- "10"
-- "12"
+# - "10"
+# - "12"
+
+addons:
+  apt:
+    packages:
+    - kafkacat
+
 
 cache: npm
 
 before_install:
+  - kafkacat
   - node --version
