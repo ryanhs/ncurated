@@ -62,6 +62,8 @@ describe('check cache oke', () => {
 
     expect(cache.redisCache.store.getClient().options.url)
       .toBe(process.env.REDIS_CONNECTION_STRING);
+
+    return cache.redisCache.store.getClient().quit();
   });
 
   it('check redis connection by each var', async () => {
@@ -93,6 +95,8 @@ describe('check cache oke', () => {
       host: redisConfig.CACHE_REDIS_HOST,
       port: String(redisConfig.CACHE_REDIS_PORT),
     });
+
+    return cache.redisCache.store.getClient().quit();
   });
 
 });
