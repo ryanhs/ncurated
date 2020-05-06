@@ -9,6 +9,10 @@ require('dotenv')
 // extends
 expect.extend(jsonSchemaMatchers);
 
+// mocks fetch
+require('jest-fetch-mock').enableMocks();
+fetchMock.dontMock();
+
 // fake timer
 // jest.useFakeTimers();
 

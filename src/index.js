@@ -6,6 +6,9 @@ const { createLogger } = require('./utils/log');
 const { createCacher } = require('./utils/cache');
 const { parseConfig } = require('./utils/config');
 
+// trackers
+const { createZipkinTracer } = require('./tracers/zipkin/index');
+
 // default instance
 const defaultInstance = {
   configs: {},
@@ -49,6 +52,11 @@ async function bootstrap(environment = 'production', configOverrides = {}, useEn
   // utils bootstraped first, since its essentials.
   instance.log = await createLogger({ configs });
   instance.cache = await createCacher({ configs, sdk: instance });
+
+  // enable zipkin?
+  if (configs.ZIPKIN_ENABLE) {
+    instance.zipkinTracer = await createZipkinTracer({ configs, sdk: instance });
+  }
 
   // put it in global var for default usage later with getInstance()
   if (overwriteGlobal || !global.ncuratedSDK) {

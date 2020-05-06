@@ -37,7 +37,7 @@ Please feel free to use any framework to use. \*as long as its compatible :-)
 
 Initialized and encapsulated with bluebird. `Promise.promisifyAll(cacheManager)`, thank me later.
 
-This say way we can use something like `sdk.cache.setAsync("a", 1)`.
+This way we can use something like `sdk.cache.setAsync("a", 1)`.
 
 #### Example
 

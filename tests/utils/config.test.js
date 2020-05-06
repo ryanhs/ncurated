@@ -1,12 +1,12 @@
 const { parseConfig, envBoolean } = require('../../src/utils/config');
 
 describe('check environment config', () => {
-  it("parse envBoolean correctly", () => {
-    expect(envBoolean("true")).toBe(true)
+  it('parse envBoolean correctly', () => {
+    expect(envBoolean('true')).toBe(true);
     expect(envBoolean(true)).toBe(true);
     expect(envBoolean(false)).toBe(false);
-    expect(envBoolean("false")).toBe(false);
-  })
+    expect(envBoolean('false')).toBe(false);
+  });
 
   it('do SDK_* overrides', async () => {
     process.env.SDK_APP_NAME = 'overrided';
@@ -44,7 +44,6 @@ describe('check environment config', () => {
     process.env.SDK_STREAM_SSL_ENABLE = false;
     process.env.SDK_STREAM_FALLBACK_ENABLE = false;
 
-    const appName = 'overrided again! by app level';
     const config = await parseConfig();
 
     // same as overrides
