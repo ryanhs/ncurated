@@ -33,6 +33,9 @@
     ]
   },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.6.5",
+    "apollo-client": "^2.6.8",
+    "apollo-link-http": "^1.5.17",
     "aws-sdk": "^2.669.0",
     "bluebird": "^3.7.2",
     "bunyan": "^1.8.12",
@@ -43,13 +46,17 @@
     "cache-manager": "^3.3.0",
     "cache-manager-redis-store": "^2.0.0",
     "connection-string": "^3.2.2",
+    "crypto": "^1.0.1",
     "flaverr": "^1.10.0",
+    "graphql": "^14.5.8",
+    "graphql-tag": "^2.10.3",
     "lodash": "^4.17.15",
     "machine": "^15.2.2",
-    "moment": "^2.25.3",
+    "node-fetch": "^2.6.0",
     "rxjs": "^6.5.5",
     "uuid": "^8.0.0",
     "zipkin": "^0.21.0",
+    "zipkin-instrumentation-fetch": "^0.21.0",
     "zipkin-transport-http": "^0.21.0"
   }
 }

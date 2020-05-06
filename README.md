@@ -20,13 +20,23 @@ then you can use this so called "sdk".
 ```javascript
 const sdk = require('sdk');
 
-
 ```
+
+
+### Configurations
+
+Most of commont configuration may be added via environment variables. (with prefix `SDK_`).
+This way, the app can be changed without touching the code.
+
+For example, you develop it in redis stream, zipkin memory, cache memory.
+But in the server you use kafka stream, zipkin http, and cache with redis. Just use `SDK_` prefix env.
+
 
 ## Integration
 
 This curated list is not really binding into a Framework.
 Please feel free to use any framework to use. \*as long as its compatible :-)
+
 
 ## Utilities
 
@@ -75,14 +85,50 @@ Bunyan ringbuffer is enabled by default. So we can use to track logs, even in un
 try to get ringBuffer object? this how we do that: `sdk.log.ringBuffer`.
 
 
-### Metrics
+## Metrics
 
+### Zipkin
+
+For easier tracer, we can use zipkin as tracer exporter.
+Just enable it with config `ZIPKIN_ENABLE` or via env `SDK_ZIPKIN_ENABLE` set to `true`.
+
+Env Variables example:
+
+```
+SDK_ZIPKIN_ENABLE: true,
+SDK_ZIPKIN_DRIVER: 'http',
+SDK_ZIPKIN_HTTP_ENDPOINT: 'http://zipkin-service:9411/api/v2/spans',
+```
 
 ## Stream
 
 
 ## Graphql
 
+A binding for ApolloClient graphql.
+
+> if you enable zipkin, then its zipkin wrapped also
+
+**Example**:
+
+```javascript
+await sdk.enable_graphql({
+  uri: 'https://some-graphql-server.com/graphql',
+  remoteServiceName: 'fakeql',
+});
+
+const query = `
+  query {
+    user (id: 1) {
+      id
+      name
+      phone
+    }
+  }
+`;
+
+const response = await sdk.graphql.query({ query, throwError: true, withCache: false });
+```
 
 ## Authorization
 

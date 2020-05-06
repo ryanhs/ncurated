@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const { bootstrap: bootstrapSdk } = require('./../../../src/');
+const { bootstrap: bootstrapSdk } = require('../../../src');
 
 let sdk;
 jest.setTimeout(60 * 1000); // 60s
@@ -26,15 +26,15 @@ describe('check http transport', () => {
     await sdk.zipkinTracer.local('static int 1', () => 1);
 
     // have span
-    await Promise.delay(1000)
+    await Promise.delay(1000);
     expect(fetch.mock.calls).toHaveLength(1);
 
     // check span
     const spanLogs = JSON.parse(fetch.mock.calls[0][1].body);
     expect(spanLogs).toHaveLength(1);
     expect(spanLogs[0]).toMatchObject({
-      name: "static int 1"
-    })
+      name: 'static int 1',
+    });
 
     fetch.dontMock();
   });

@@ -16,5 +16,5 @@ fetchMock.dontMock();
 // fake timer
 // jest.useFakeTimers();
 
-// timeout 10s
-// jest.setTimeout(10000);
+// timeout 30s
+jest.setTimeout(30000);
