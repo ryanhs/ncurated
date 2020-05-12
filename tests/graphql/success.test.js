@@ -35,6 +35,22 @@ const responseSchema = {
 describe('success', () => {
 
   it('success query', async () => {
+    const mock = () => {
+      // fetchMock.dontMock();
+      fetchMock.doMock();
+      fetchMock.mockResponses([
+        JSON.stringify({
+          "data": {
+            "user": {
+              "id": "1",
+              "name": "Leanne Graham",
+              "phone": "1-770-736-8031 x56222"
+            }
+          }
+        }),
+      ])
+    }
+
     await sdk.enable_graphql('ok', {
       uri: 'https://graphqlzero.almansi.me/api',
       remoteServiceName: 'fakeql',
@@ -50,6 +66,7 @@ describe('success', () => {
       }
     `;
 
+    mock();
     const response = await sdk.graphqls.ok.query({ query, throwError: true, withCache: false });
     expect(response.data.user).toBeTruthy();
     expect(response.data.user.id).toBeTruthy();
@@ -59,6 +76,7 @@ describe('success', () => {
     expect(response).toMatchSchema(responseSchema);
     const lastLogCount = sdk.log.ringBuffer.records.length;
 
+    mock();
     const fromCache = await sdk.graphqls.ok.query({ query, throwError: true });
     expect(response.hash).toBe(fromCache.hash);
 
@@ -67,6 +85,22 @@ describe('success', () => {
   });
 
   it('success query with default mode', async () => {
+    const mock = () => {
+      // fetchMock.dontMock();
+      fetchMock.doMock();
+      fetchMock.mockResponses([
+        JSON.stringify({
+          "data": {
+            "user": {
+              "id": "1",
+              "name": "Leanne Graham",
+              "phone": "1-770-736-8031 x56222"
+            }
+          }
+        }),
+      ])
+    }
+
     await sdk.enable_graphql({
       uri: 'https://graphqlzero.almansi.me/api',
       remoteServiceName: 'fakeql',
@@ -82,6 +116,7 @@ describe('success', () => {
       }
     `;
 
+    mock();
     const response = await sdk.graphql.query({ query, throwError: true, withCache: false });
     expect(response.data.user).toBeTruthy();
     expect(response.data.user.id).toBeTruthy();
@@ -91,6 +126,7 @@ describe('success', () => {
     expect(response).toMatchSchema(responseSchema);
     const lastLogCount = sdk.log.ringBuffer.records.length;
 
+    mock();
     const fromCache = await sdk.graphqls.ok.query({ query, throwError: true });
     expect(response.hash).toBe(fromCache.hash);
 
@@ -99,6 +135,22 @@ describe('success', () => {
   });
 
   it('success query with cache', async () => {
+    const mock = () => {
+      // fetchMock.dontMock();
+      fetchMock.doMock();
+      fetchMock.mockResponses([
+        JSON.stringify({
+          "data": {
+            "user": {
+              "id": "1",
+              "name": "Leanne Graham",
+              "phone": "1-770-736-8031 x56222"
+            }
+          }
+        }),
+      ])
+    }
+
     await sdk.enable_graphql('ok', {
       uri: 'https://graphqlzero.almansi.me/api',
       remoteServiceName: 'fakeql',
@@ -114,6 +166,7 @@ describe('success', () => {
       }
     `;
 
+    mock();
     const response = await sdk.graphqls.ok.query({ query, throwError: true, withCache: true });
     expect(response.data.user).toBeTruthy();
     expect(response.data.user.id).toBeTruthy();
@@ -123,6 +176,7 @@ describe('success', () => {
     expect(response).toMatchSchema(responseSchema);
     const lastLogCount = sdk.log.ringBuffer.records.length;
 
+    // no mock because of cache!
     const fromCache = await sdk.graphqls.ok.query({ query, throwError: true, withCache: true });
     expect(response.hash).toBe(fromCache.hash);
 
@@ -131,6 +185,21 @@ describe('success', () => {
   });
 
   it('success mutation', async () => {
+    const mock = () => {
+      // fetchMock.dontMock();
+      fetchMock.doMock();
+      fetchMock.mockResponses([
+        JSON.stringify({
+          "data": {
+            "post": {
+              "id": "26",
+              "title": "A Very Captivating Post Title"
+            }
+          }
+        }),
+      ])
+    }
+
     await sdk.enable_graphql('ok', {
       uri: 'https://graphqlzero.almansi.me/api',
       remoteServiceName: 'fakeql',
@@ -141,18 +210,19 @@ describe('success', () => {
         post: createPost(input: $input) {
           id
           title
-          body
         }
       }
     `;
 
     const variables = {
-      input: {
-        title: 'A Very Captivating Post Title',
-        body: 'Some interesting content.',
-      },
+      "input": {
+        "user_id": 1,
+        "date": "2020-05-12T17:10:05.567Z",
+        "title": "A Very Captivating Post Title"
+      }
     };
 
+    mock();
     const response = await sdk.graphqls.ok.mutate({
       mutation,
       variables,
@@ -161,8 +231,6 @@ describe('success', () => {
     expect(response.data.post).toBeTruthy();
     expect(response.data.post.id).toBeTruthy();
     expect(response.data.post.title).toBeTruthy();
-    expect(response.data.post.body).toBeTruthy();
-    expect(response.data.post).toMatchObject(variables.input);
     expect(response.errors.length).toBe(0);
     expect(response).toMatchSchema(responseSchema);
   });

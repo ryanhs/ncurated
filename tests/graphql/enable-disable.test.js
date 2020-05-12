@@ -7,7 +7,7 @@ beforeEach(async () => {
   sdk = await bootstrap('development', {
     APP_NAME: 'jest',
     LOG_DEBUG_ENABLE: false,
-    ZIPKIN_ENABLE: true,
+    ZIPKIN_ENABLE: false,
     ZIPKIN_DRIVER: 'none',
   });
   // await sdk.enable_stream();
@@ -35,6 +35,22 @@ const responseSchema = {
 describe('success', () => {
 
   it('enable by name', async () => {
+    const mock = () => {
+      // fetchMock.dontMock();
+      fetchMock.doMock();
+      fetchMock.mockResponses([
+        JSON.stringify({
+          "data": {
+            "user": {
+              "id": "1",
+              "name": "Leanne Graham",
+              "phone": "1-770-736-8031 x56222"
+            }
+          }
+        }),
+      ])
+    }
+
     await sdk.enable_graphql('ok', {
       uri: 'https://graphqlzero.almansi.me/api',
       remoteServiceName: 'fakeql',
@@ -50,6 +66,7 @@ describe('success', () => {
       }
     `;
 
+    mock();
     const response = await sdk.graphqls.ok.query({ query, throwError: true, withCache: false });
     expect(response.data.user).toBeTruthy();
     expect(response.data.user.id).toBeTruthy();
@@ -59,6 +76,7 @@ describe('success', () => {
     expect(response).toMatchSchema(responseSchema);
     const lastLogCount = sdk.log.ringBuffer.records.length;
 
+    mock();
     const fromCache = await sdk.graphqls.ok.query({ query, throwError: true });
     expect(response.hash).toBe(fromCache.hash);
 
@@ -67,6 +85,22 @@ describe('success', () => {
   });
 
   it('enable by default', async () => {
+    const mock = () => {
+      // fetchMock.dontMock();
+      fetchMock.doMock();
+      fetchMock.mockResponses([
+        JSON.stringify({
+          "data": {
+            "user": {
+              "id": "1",
+              "name": "Leanne Graham",
+              "phone": "1-770-736-8031 x56222"
+            }
+          }
+        }),
+      ])
+    }
+
     await sdk.enable_graphql({
       uri: 'https://graphqlzero.almansi.me/api',
       remoteServiceName: 'fakeql',
@@ -82,6 +116,7 @@ describe('success', () => {
       }
     `;
 
+    mock();
     const response = await sdk.graphql.query({ query, throwError: true, withCache: false });
     expect(response.data.user).toBeTruthy();
     expect(response.data.user.id).toBeTruthy();
@@ -91,6 +126,7 @@ describe('success', () => {
     expect(response).toMatchSchema(responseSchema);
     const lastLogCount = sdk.log.ringBuffer.records.length;
 
+    mock();
     const fromCache = await sdk.graphql.query({ query, throwError: true });
     expect(response.hash).toBe(fromCache.hash);
 

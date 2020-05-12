@@ -35,6 +35,32 @@ const responseSchema = {
 describe('check with throwError: false', () => {
 
   it('error on graphql', async () => {
+    const mock = () => {
+      // fetchMock.dontMock();
+      fetchMock.doMock();
+      fetchMock.mockResponses([
+        JSON.stringify({
+          "errors": [
+            {
+              "message": "Cannot set property '_nest' of undefined",
+              "locations": [
+                {
+                  "line": 2,
+                  "column": 3
+                }
+              ],
+              "path": [
+                "user"
+              ]
+            }
+          ],
+          "data": {
+            "user": null
+          }
+        }),
+      ])
+    }
+
     await sdk.enable_graphql('default', {
       uri: 'https://fakeql.com/graphql/4e71d3354872265c9d42f69859d2ef14',
       // uri: "http://meunang.com",
@@ -52,6 +78,7 @@ describe('check with throwError: false', () => {
       }
     `;
 
+    mock();
     const response = await sdk.graphql.query({ query, throwError: false });
     expect(Array.isArray(response.errors)).toBeTruthy();
     expect(response.errors.length).toBeGreaterThan(0);
@@ -59,6 +86,14 @@ describe('check with throwError: false', () => {
   });
 
   it('error on parsing', async () => {
+    const mock = () => {
+      // fetchMock.dontMock();
+      fetchMock.doMock();
+      fetchMock.mockResponses([
+        'just some error',
+      ])
+    }
+
     await sdk.enable_graphql('default', {
       // uri: 'https://fakeql.com/graphql/4e71d3354872265c9d42f69859d2ef14',
       uri: 'http://meunang.com',
@@ -76,6 +111,7 @@ describe('check with throwError: false', () => {
       }
     `;
 
+    mock();
     const response = await sdk.graphql.query({ query, throwError: false });
     expect(Array.isArray(response.errors)).toBeTruthy();
     expect(response.errors.length).toBeGreaterThan(0);

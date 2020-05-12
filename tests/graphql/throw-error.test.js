@@ -16,8 +16,28 @@ beforeAll(async () => {
 describe('check with throwError: true', () => {
 
   it('error on graphql', async () => {
+    const mock = () => {
+      // fetchMock.dontMock();
+      fetchMock.doMock();
+      fetchMock.mockResponses([
+        JSON.stringify({
+          "errors": [
+            {
+              "message": "Expected type Int, found \"fe\".",
+              "locations": [
+                {
+                  "line": 2,
+                  "column": 15
+                }
+              ]
+            }
+          ]
+        }),
+      ])
+    }
+
     await sdk.enable_graphql('default', {
-      uri: 'https://graphqlzero.almansi.me/api',
+      uri: 'https://fakeql.com/graphql/29f1e13d226c2689483960dc9e248b0c',
       remoteServiceName: 'fakeql',
     });
 
@@ -32,11 +52,32 @@ describe('check with throwError: true', () => {
       }
     `;
 
+    mock();
     const response = sdk.graphql.query({ query, throwError: true });
     await expect(response).rejects.toThrow();
   });
 
   it('error on parsing', async () => {
+    const mock = () => {
+      // fetchMock.dontMock();
+      fetchMock.doMock();
+      fetchMock.mockResponses([
+        JSON.stringify({
+          "errors": [
+            {
+              "message": "Expected type Int, found \"fe\".",
+              "locations": [
+                {
+                  "line": 2,
+                  "column": 15
+                }
+              ]
+            }
+          ]
+        }),
+      ])
+    }
+
     await sdk.enable_graphql('default', {
       uri: 'https://fakeql.com',
       remoteServiceName: 'meunang',
@@ -44,7 +85,7 @@ describe('check with throwError: true', () => {
 
     const query = gql`
       {
-        user (id: 134123) {
+        user (id: "fe") {
           id
           firstname
           age
@@ -52,8 +93,9 @@ describe('check with throwError: true', () => {
       }
     `;
 
+    mock();
     const response = sdk.graphql.query({ query, throwError: true });
-    await expect(response).rejects.toThrow(/Unexpected token/ig);
+    await expect(response).rejects.toThrow(/expected/ig);
   });
 
   it('error on networkError: 1', async () => {

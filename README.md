@@ -1,6 +1,6 @@
 # NCurated
 
-[![Build Status](https://travis-ci.com/ryanhs/node-curated.svg?branch=master)](https://travis-ci.com/ryanhs/node-curated)
+[![Build Status](https://travis-ci.com/ryanhs/ncurated.svg?branch=master)](https://travis-ci.com/ryanhs/ncurated)
 
 This is not a Framework per se. This more like just a curated list of nodejs packages.
 
@@ -135,6 +135,7 @@ const response = await sdk.graphql.query({ query, throwError: true, withCache: f
 
 ## Mutex
 
+*- to do -*
 
 ## Awesome Libraries
 

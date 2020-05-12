@@ -27,10 +27,7 @@ const defaultInstance = {
   stream: null, // default stream
   streams: { default: null },
 
-  mutex: null, // default mutex
-  mutexes: { default: null },
-
-  graphql: null, // default mutex
+  graphql: null, // default graphql
   graphqls: { default: null },
 };
 
@@ -43,6 +40,41 @@ function logoPrint() {
   this.log.trace(logo);
   return logo;
 }
+
+// ---------------------------------------------------------------------------
+//
+// async enable_mutex(name = 'default', configs) {
+//   const sdk = this; // -_-
+//
+//   // only if default then try from sdk configs
+//   const mergedConfigs = name === 'default'
+//     ? (configs || sdk.configs)
+//     : (configs || {});
+//
+//   const connection = await connectMutex({ configs: mergedConfigs, sdk });
+//   sdk.mutexes[name] = connection;
+//
+//   // default?
+//   if (name === 'default') {
+//     sdk.mutex = connection;
+//   }
+//
+//   return sdk.mutexes[name];
+// };
+//
+// async disable_mutex(name = 'default') {
+//   const sdk = this; // -_-
+//
+//   if (Object.prototype.hasOwnProperty.call(sdk.mutexes[name], 'destroy')) {
+//     await instance.mutexes[name].destroy();
+//   }
+//
+//   delete sdk.mutexes[name];
+//
+//   if (name === 'default') {
+//     sdk.mutex = null;
+//   }
+// };
 
 // ---------------------------------------------------------------------------
 
@@ -105,7 +137,7 @@ async function bootstrap(environment = 'production', configOverrides = {}, useEn
     instance.zipkinTracer = await createZipkinTracer({ configs, sdk: instance });
   }
 
-  // integration with graphql, with back compatibility for camelcase
+  // integration with graphql, with back compatibility for not camelcase
   instance.enable_graphql = enableGraphql.bind(instance);
   instance.disable_graphql = disableGraphql.bind(instance);
   instance.enableGraphql = enableGraphql.bind(instance);
