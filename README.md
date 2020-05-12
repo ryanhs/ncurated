@@ -1,6 +1,7 @@
 # NCurated
 
 [![Build Status](https://travis-ci.com/ryanhs/ncurated.svg?branch=master)](https://travis-ci.com/ryanhs/ncurated)
+![node-current](https://img.shields.io/node/v/ncurated)
 
 This is not a Framework per se. This more like just a curated list of nodejs packages.
 
