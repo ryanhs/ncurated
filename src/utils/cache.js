@@ -31,46 +31,67 @@ const def = {
   },
 
   async fn({ configs, sdk }, exits) {
-    const stores = [];
+    const createCacher = (namespace = 'default') => {
+      const stores = [];
 
-    if (configs.CACHE_MEMORY_ENABLE) {
-      stores.push(cacheManager.caching({
-        store: 'memory',
-        max: configs.CACHE_MEMORY_MAX || 10000,
-        ttl: configs.CACHE_MEMORY_TTL || 60,
-      }));
-    }
+      if (configs.CACHE_MEMORY_ENABLE) {
+        stores.push(cacheManager.caching({
+          store: 'memory',
+          max: configs.CACHE_MEMORY_MAX || 10000,
+          ttl: configs.CACHE_MEMORY_TTL || 60,
+        }));
+      }
 
-    let redisCache;
-    if (configs.CACHE_REDIS_ENABLE) {
-      const redisUrl = (configs.CACHE_REDIS_URL)
-        ? configs.CACHE_REDIS_URL
-        : new ConnectionString('', {
-          protocol: 'redis',
-          hosts: [{
-            name: configs.CACHE_REDIS_HOST,
-            port: parseInt(configs.CACHE_REDIS_PORT, 10),
-          }],
-          password: configs.CACHE_REDIS_PASS,
-          path: [String(parseInt(configs.CACHE_REDIS_DB, 10))],
-        }).toString();
+      let redisCache;
+      if (configs.CACHE_REDIS_ENABLE) {
+        const redisUrl = (configs.CACHE_REDIS_URL)
+          ? configs.CACHE_REDIS_URL
+          : new ConnectionString('', {
+            protocol: 'redis',
+            hosts: [{
+              name: configs.CACHE_REDIS_HOST,
+              port: parseInt(configs.CACHE_REDIS_PORT, 10),
+            }],
+            password: configs.CACHE_REDIS_PASS,
+            path: [String(parseInt(configs.CACHE_REDIS_DB, 10))],
+          }).toString();
 
-      redisCache = cacheManager.caching({
-        store: redisStore,
-        url: redisUrl,
-        ttl: configs.CACHE_REDIS_TTL || 1800,
+        redisCache = cacheManager.caching({
+          store: redisStore,
+          url: redisUrl,
+          ttl: configs.CACHE_REDIS_TTL || 1800,
+        });
+        stores.push(redisCache);
+      }
+
+      sdk.log.info('cache enabled', {
+        namespace,
+        memory: configs.CACHE_MEMORY_ENABLE,
+        redis: configs.CACHE_REDIS_ENABLE,
       });
-      stores.push(redisCache);
+
+      // create multi level cache, with bluebird promiseDependency
+
+      const cacher = cacheManager.multiCaching(stores, { promiseDependency: Promise });
+      cacher.redisCache = redisCache; // expose redis?
+      return cacher
     }
 
-    sdk.log.info('cache enabled', {
-      memory: configs.CACHE_MEMORY_ENABLE,
-      redis: configs.CACHE_REDIS_ENABLE,
-    });
+    const cacher = createCacher();
 
-    const cacher = cacheManager.multiCaching(stores);
-    cacher.redisCache = redisCache; // expose redis?
-    return exits.success(Promise.promisifyAll(cacher)); // :-) good idea to use bluebird here
+    // a helper function to create new separated cache in a namespace
+    const namespaces = { };
+    cacher.namespace = namespace => {
+      if (namespaces[namespace]) {
+        return namespaces[namespace];
+      }
+
+      namespaces[namespace] = createCacher(namespace);
+      return namespaces[namespace];
+    }
+
+
+    return exits.success(cacher);
   },
 };
 

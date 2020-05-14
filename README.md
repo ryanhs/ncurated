@@ -46,9 +46,39 @@ Please feel free to use any framework to use. \*as long as its compatible :-)
 - cache-manager
 - cache-manager-redis-store
 
-Initialized and encapsulated with bluebird. `Promise.promisifyAll(cacheManager)`, thank me later.
+Initialized and encapsulated with bluebird. thank me later.
 
 This way we can use something like `sdk.cache.setAsync("a", 1)`.
+
+#### namespace
+
+In real world scenario a cache may/should have a namespace.
+For example, a cache for collection/table Post, and User.
+You can cache each user, delete by userId, but if you make bulk update / delete, just reset the cache for namespace User (Post namespace not affected)
+
+```javascript
+// default
+await cache.set('a', 1);
+await expect(cache.get('a')).resolves.toBe(1);
+
+// namespace posts
+await cache.namespace('posts').set('a', 11);
+await expect(cache.namespace('posts').get('a')).resolves.toBe(11);
+await expect(cache.get('a')).resolves.toBe(1); // still 1 for default
+
+// namespace users
+await cache.namespace('users').set('a', 222);
+await expect(cache.namespace('users').get('a')).resolves.toBe(222);
+await expect(cache.namespace('posts').get('a')).resolves.toBe(11); // still 11 for posts
+await expect(cache.get('a')).resolves.toBe(1); // still 1 for default
+
+// reset posts
+await cache.namespace('posts').reset();
+await expect(cache.namespace('users').get('a')).resolves.toBe(222);
+await expect(cache.namespace('posts').get('a')).resolves.toBe(undefined); // no more for posts
+await expect(cache.get('a')).resolves.toBe(1); // still 1 for default
+});
+```
 
 #### Example
 
