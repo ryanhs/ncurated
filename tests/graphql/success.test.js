@@ -40,16 +40,16 @@ describe('success', () => {
       fetchMock.doMock();
       fetchMock.mockResponses([
         JSON.stringify({
-          "data": {
-            "user": {
-              "id": "1",
-              "name": "Leanne Graham",
-              "phone": "1-770-736-8031 x56222"
-            }
-          }
+          data: {
+            user: {
+              id: '1',
+              name: 'Leanne Graham',
+              phone: '1-770-736-8031 x56222',
+            },
+          },
         }),
-      ])
-    }
+      ]);
+    };
 
     await sdk.enable_graphql('ok', {
       uri: 'https://graphqlzero.almansi.me/api',
@@ -90,16 +90,16 @@ describe('success', () => {
       fetchMock.doMock();
       fetchMock.mockResponses([
         JSON.stringify({
-          "data": {
-            "user": {
-              "id": "1",
-              "name": "Leanne Graham",
-              "phone": "1-770-736-8031 x56222"
-            }
-          }
+          data: {
+            user: {
+              id: '1',
+              name: 'Leanne Graham',
+              phone: '1-770-736-8031 x56222',
+            },
+          },
         }),
-      ])
-    }
+      ]);
+    };
 
     await sdk.enable_graphql({
       uri: 'https://graphqlzero.almansi.me/api',
@@ -140,16 +140,16 @@ describe('success', () => {
       fetchMock.doMock();
       fetchMock.mockResponses([
         JSON.stringify({
-          "data": {
-            "user": {
-              "id": "1",
-              "name": "Leanne Graham",
-              "phone": "1-770-736-8031 x56222"
-            }
-          }
+          data: {
+            user: {
+              id: '1',
+              name: 'Leanne Graham',
+              phone: '1-770-736-8031 x56222',
+            },
+          },
         }),
-      ])
-    }
+      ]);
+    };
 
     await sdk.enable_graphql('ok', {
       uri: 'https://graphqlzero.almansi.me/api',
@@ -190,15 +190,15 @@ describe('success', () => {
       fetchMock.doMock();
       fetchMock.mockResponses([
         JSON.stringify({
-          "data": {
-            "post": {
-              "id": "26",
-              "title": "A Very Captivating Post Title"
-            }
-          }
+          data: {
+            post: {
+              id: '26',
+              title: 'A Very Captivating Post Title',
+            },
+          },
         }),
-      ])
-    }
+      ]);
+    };
 
     await sdk.enable_graphql('ok', {
       uri: 'https://graphqlzero.almansi.me/api',
@@ -215,11 +215,11 @@ describe('success', () => {
     `;
 
     const variables = {
-      "input": {
-        "user_id": 1,
-        "date": "2020-05-12T17:10:05.567Z",
-        "title": "A Very Captivating Post Title"
-      }
+      input: {
+        user_id: 1,
+        date: '2020-05-12T17:10:05.567Z',
+        title: 'A Very Captivating Post Title',
+      },
     };
 
     mock();

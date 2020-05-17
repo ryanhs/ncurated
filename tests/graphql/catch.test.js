@@ -40,26 +40,26 @@ describe('check with throwError: false', () => {
       fetchMock.doMock();
       fetchMock.mockResponses([
         JSON.stringify({
-          "errors": [
+          errors: [
             {
-              "message": "Cannot set property '_nest' of undefined",
-              "locations": [
+              message: "Cannot set property '_nest' of undefined",
+              locations: [
                 {
-                  "line": 2,
-                  "column": 3
-                }
+                  line: 2,
+                  column: 3,
+                },
               ],
-              "path": [
-                "user"
-              ]
-            }
+              path: [
+                'user',
+              ],
+            },
           ],
-          "data": {
-            "user": null
-          }
+          data: {
+            user: null,
+          },
         }),
-      ])
-    }
+      ]);
+    };
 
     await sdk.enable_graphql('default', {
       uri: 'https://fakeql.com/graphql/4e71d3354872265c9d42f69859d2ef14',
@@ -91,8 +91,8 @@ describe('check with throwError: false', () => {
       fetchMock.doMock();
       fetchMock.mockResponses([
         'just some error',
-      ])
-    }
+      ]);
+    };
 
     await sdk.enable_graphql('default', {
       // uri: 'https://fakeql.com/graphql/4e71d3354872265c9d42f69859d2ef14',

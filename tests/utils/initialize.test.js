@@ -18,8 +18,8 @@ describe('check initialize sdk', () => {
   it('check cache', async () => {
     const sdk = await bootstrap('development');
     const uuid = faker.random.uuid();
-    await sdk.cache.setAsync(uuid, uuid);
-    return expect(sdk.cache.getAsync(uuid)).resolves.toBe(uuid);
+    await sdk.cache.set(uuid, uuid);
+    return expect(sdk.cache.get(uuid)).resolves.toBe(uuid);
   });
 
   it('check getInstance return same instance', async () => {

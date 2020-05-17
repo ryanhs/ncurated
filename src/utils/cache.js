@@ -74,21 +74,21 @@ const def = {
 
       const cacher = cacheManager.multiCaching(stores, { promiseDependency: Promise });
       cacher.redisCache = redisCache; // expose redis?
-      return cacher
-    }
+      return cacher;
+    };
 
     const cacher = createCacher();
 
     // a helper function to create new separated cache in a namespace
     const namespaces = { };
-    cacher.namespace = namespace => {
+    cacher.namespace = (namespace) => {
       if (namespaces[namespace]) {
         return namespaces[namespace];
       }
 
       namespaces[namespace] = createCacher(namespace);
       return namespaces[namespace];
-    }
+    };
 
 
     return exits.success(cacher);

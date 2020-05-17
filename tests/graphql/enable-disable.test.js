@@ -1,4 +1,4 @@
-const gql = require('graphql-tag');
+// const gql = require('graphql-tag');
 const { bootstrap } = require('../../src');
 
 let sdk;
@@ -40,16 +40,16 @@ describe('success', () => {
       fetchMock.doMock();
       fetchMock.mockResponses([
         JSON.stringify({
-          "data": {
-            "user": {
-              "id": "1",
-              "name": "Leanne Graham",
-              "phone": "1-770-736-8031 x56222"
-            }
-          }
+          data: {
+            user: {
+              id: '1',
+              name: 'Leanne Graham',
+              phone: '1-770-736-8031 x56222',
+            },
+          },
         }),
-      ])
-    }
+      ]);
+    };
 
     await sdk.enable_graphql('ok', {
       uri: 'https://graphqlzero.almansi.me/api',
@@ -90,16 +90,16 @@ describe('success', () => {
       fetchMock.doMock();
       fetchMock.mockResponses([
         JSON.stringify({
-          "data": {
-            "user": {
-              "id": "1",
-              "name": "Leanne Graham",
-              "phone": "1-770-736-8031 x56222"
-            }
-          }
+          data: {
+            user: {
+              id: '1',
+              name: 'Leanne Graham',
+              phone: '1-770-736-8031 x56222',
+            },
+          },
         }),
-      ])
-    }
+      ]);
+    };
 
     await sdk.enable_graphql({
       uri: 'https://graphqlzero.almansi.me/api',

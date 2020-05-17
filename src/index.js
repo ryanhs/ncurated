@@ -12,6 +12,9 @@ const { createZipkinTracer } = require('./tracers/zipkin/index');
 // connect
 const connectGraphql = require('./graphql/connect');
 
+// connect
+const connectStream = require('./streams/connect');
+
 // default instance
 const defaultInstance = {
   configs: {},
@@ -75,6 +78,45 @@ function logoPrint() {
 //     sdk.mutex = null;
 //   }
 // };
+
+// ---------------------------------------------------------------------------
+
+
+async function enableStream(name = 'default', configs) {
+  const sdk = this; // -_-
+
+  // only if default then try from sdk configs
+  const mergedConfigs = name === 'default'
+    ? (configs || sdk.configs)
+    : (configs || {});
+
+  const connection = await connectStream({ configs: mergedConfigs, sdk });
+  sdk.streams[name] = connection;
+
+  // default?
+  if (name === 'default') {
+    sdk.stream = connection;
+  }
+
+  return sdk.streams[name];
+}
+
+async function disableStream(name = 'default') {
+  const sdk = this; // -_-
+
+  // call destroy
+  if (Object.prototype.hasOwnProperty.call(sdk.streams[name], 'destroy')) {
+    await sdk.streams[name].destroy();
+  }
+
+  // just delete instance
+  delete sdk.streams[name];
+
+  // if default, then remove default
+  if (name === 'default') {
+    sdk.stream = null;
+  }
+}
 
 // ---------------------------------------------------------------------------
 
@@ -142,6 +184,12 @@ async function bootstrap(environment = 'production', configOverrides = {}, useEn
   instance.disable_graphql = disableGraphql.bind(instance);
   instance.enableGraphql = enableGraphql.bind(instance);
   instance.disableGraphql = disableGraphql.bind(instance);
+
+  // integration with stream, with back compatibility for not camelcase
+  instance.enable_stream = enableStream.bind(instance);
+  instance.disable_stream = disableStream.bind(instance);
+  instance.enableStream = enableStream.bind(instance);
+  instance.disableStream = disableStream.bind(instance);
 
 
   // put it in global var for default usage later with getInstance()

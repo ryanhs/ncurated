@@ -1,0 +1,22 @@
+{
+  "machinepack": {
+    "friendlyName": "Stream Driver Redis",
+    "machineDir": "machines/",
+    "machines": [
+      "createInstance",
+      "destroyInstance",
+      "healthcheck",
+      "makeObservable",
+      "publish"
+    ]
+  },
+  "dependencies": {
+    "bluebird": "^3.7.1",
+    "connection-string": "^3.0.4",
+    "faker": "^4.1.0",
+    "machine": "^15.2.2",
+    "redis": "^2.8.0",
+    "rxjs": "^6.5.3",
+    "uuid": "^3.3.3"
+  }
+}

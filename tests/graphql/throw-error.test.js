@@ -21,20 +21,20 @@ describe('check with throwError: true', () => {
       fetchMock.doMock();
       fetchMock.mockResponses([
         JSON.stringify({
-          "errors": [
+          errors: [
             {
-              "message": "Expected type Int, found \"fe\".",
-              "locations": [
+              message: 'Expected type Int, found "fe".',
+              locations: [
                 {
-                  "line": 2,
-                  "column": 15
-                }
-              ]
-            }
-          ]
+                  line: 2,
+                  column: 15,
+                },
+              ],
+            },
+          ],
         }),
-      ])
-    }
+      ]);
+    };
 
     await sdk.enable_graphql('default', {
       uri: 'https://fakeql.com/graphql/29f1e13d226c2689483960dc9e248b0c',
@@ -63,20 +63,20 @@ describe('check with throwError: true', () => {
       fetchMock.doMock();
       fetchMock.mockResponses([
         JSON.stringify({
-          "errors": [
+          errors: [
             {
-              "message": "Expected type Int, found \"fe\".",
-              "locations": [
+              message: 'Expected type Int, found "fe".',
+              locations: [
                 {
-                  "line": 2,
-                  "column": 15
-                }
-              ]
-            }
-          ]
+                  line: 2,
+                  column: 15,
+                },
+              ],
+            },
+          ],
         }),
-      ])
-    }
+      ]);
+    };
 
     await sdk.enable_graphql('default', {
       uri: 'https://fakeql.com',
