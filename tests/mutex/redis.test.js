@@ -63,7 +63,7 @@ describe('check', () => {
       Promise.delay( 200).then(() => run('1.3',    200,                300)),
 
 
-      // #1 batch
+      // #2 batch
       // called At                      id   run in (ms)    startedAt should be >=
       Promise.delay( 800).then(() => run('2.1',    200,                800)),
       Promise.delay( 900).then(() => run('2.2',    200,                800)),
