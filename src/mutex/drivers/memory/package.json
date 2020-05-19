@@ -1,0 +1,19 @@
+{
+  "machinepack": {
+    "friendlyName": "Mutex Driver Memory",
+    "machineDir": "machines/",
+    "machines": [
+      "createInstance",
+      "destroyInstance",
+      "healthcheck",
+      "acquire"
+    ]
+  },
+  "dependencies": {
+    "bluebird": "^3.7.1",
+    "faker": "^4.1.0",
+    "machine": "^15.2.2",
+    "mutex-promise": "^0.1.0",
+    "uuid": "^3.3.3"
+  }
+}

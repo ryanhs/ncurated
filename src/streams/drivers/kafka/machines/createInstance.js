@@ -23,7 +23,7 @@ module.exports = {
   ...contract,
   friendlyName: 'createInstance',
   description: 'Create stream driver with kafka',
-  
+
   fn({
     sdk, connectionString,
     sslEnable = false, sslRejectUnauthorized, sslCaFile, sslKeyFile, sslCertFile,
@@ -36,7 +36,13 @@ module.exports = {
     });
 
     const connectionStringParsed = new ConnectionString(connectionString);
-    const brokers = connectionStringParsed.hosts.map((v) => `${v.name}:${v.port}`);
+    if (!connectionStringParsed.hosts) {
+      const msg = `No hosts available in stream connection! ${connectionString}`;
+      sdk.log.error(msg);
+      throw new Error(msg);
+    }
+
+    const brokers = connectionStringParsed.hosts.map((v) => v.toString());
 
     let ssl = sslEnable;
     if (sslEnable && (sslRejectUnauthorized || sslCaFile || sslKeyFile || sslCertFile)) {

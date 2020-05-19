@@ -11,9 +11,8 @@ const { createZipkinTracer } = require('./tracers/zipkin/index');
 
 // connect
 const connectGraphql = require('./graphql/connect');
-
-// connect
 const connectStream = require('./streams/connect');
+const connectMutex = require('./mutex/connect');
 
 // default instance
 const defaultInstance = {
@@ -30,6 +29,9 @@ const defaultInstance = {
   stream: null, // default stream
   streams: { default: null },
 
+  mutex: null, // default stream
+  mutexes: { default: null },
+
   graphql: null, // default graphql
   graphqls: { default: null },
 };
@@ -45,42 +47,44 @@ function logoPrint() {
 }
 
 // ---------------------------------------------------------------------------
-//
-// async enable_mutex(name = 'default', configs) {
-//   const sdk = this; // -_-
-//
-//   // only if default then try from sdk configs
-//   const mergedConfigs = name === 'default'
-//     ? (configs || sdk.configs)
-//     : (configs || {});
-//
-//   const connection = await connectMutex({ configs: mergedConfigs, sdk });
-//   sdk.mutexes[name] = connection;
-//
-//   // default?
-//   if (name === 'default') {
-//     sdk.mutex = connection;
-//   }
-//
-//   return sdk.mutexes[name];
-// };
-//
-// async disable_mutex(name = 'default') {
-//   const sdk = this; // -_-
-//
-//   if (Object.prototype.hasOwnProperty.call(sdk.mutexes[name], 'destroy')) {
-//     await instance.mutexes[name].destroy();
-//   }
-//
-//   delete sdk.mutexes[name];
-//
-//   if (name === 'default') {
-//     sdk.mutex = null;
-//   }
-// };
+
+async function enableMutex(name = 'default', configs) {
+  const sdk = this; // -_-
+
+  // only if default then try from sdk configs
+  const mergedConfigs = name === 'default'
+    ? (configs || sdk.configs)
+    : (configs || {});
+
+  const connection = await connectMutex({ configs: mergedConfigs, sdk });
+  sdk.mutexes[name] = connection;
+
+  // default?
+  if (name === 'default') {
+    sdk.mutex = connection;
+  }
+
+  return sdk.mutexes[name];
+}
+
+async function disableMutex(name = 'default') {
+  const sdk = this; // -_-
+
+  // call destroy
+  if (Object.prototype.hasOwnProperty.call(sdk.mutexes[name], 'destroy')) {
+    await sdk.mutexes[name].destroy();
+  }
+
+  // just delete instance
+  delete sdk.mutexes[name];
+
+  // if default, then remove default
+  if (name === 'default') {
+    sdk.mutex = null;
+  }
+}
 
 // ---------------------------------------------------------------------------
-
 
 async function enableStream(name = 'default', configs) {
   const sdk = this; // -_-
@@ -191,6 +195,11 @@ async function bootstrap(environment = 'production', configOverrides = {}, useEn
   instance.enableStream = enableStream.bind(instance);
   instance.disableStream = disableStream.bind(instance);
 
+  // integration with mutex, with back compatibility for not camelcase
+  instance.enable_mutex = enableMutex.bind(instance);
+  instance.disable_mutex = disableMutex.bind(instance);
+  instance.enableMutex = enableMutex.bind(instance);
+  instance.disableMutex = disableMutex.bind(instance);
 
   // put it in global var for default usage later with getInstance()
   if (overwriteGlobal || !global.ncuratedSDK) {
