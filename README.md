@@ -1,7 +1,6 @@
 # NCurated
 
-[![Build Status](https://travis-ci.com/ryanhs/ncurated.svg?branch=master)](https://travis-ci.com/ryanhs/ncurated)
-![node-current](https://img.shields.io/node/v/ncurated)
+[![Build Status](https://travis-ci.com/ryanhs/ncurated.svg?branch=master)](https://travis-ci.com/ryanhs/ncurated)  [![Coverage Status](https://coveralls.io/repos/github/ryanhs/ncurated/badge.svg?branch=master)](https://coveralls.io/github/ryanhs/ncurated?branch=master)  ![node-current](https://img.shields.io/node/v/ncurated)
 
 This is not a Framework per se. This more like just a curated list of nodejs packages.
 

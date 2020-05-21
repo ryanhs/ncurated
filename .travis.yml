@@ -30,3 +30,8 @@ before_install:
 
   # copy jest.env
   - cp jest.env.example jest.env
+
+script:
+  - yarn test
+  - echo $COVERALLS_TOKEN | tee .coveralls.yml
+  - yarn coveralls:push
