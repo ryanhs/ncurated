@@ -52,7 +52,7 @@
     "kafkajs": "^1.12.0",
     "lodash": "^4.17.15",
     "machine": "^15.2.2",
-    "mutex-promise": "^0.1.0",
+    "mutex-promise": "https://github.com/ryanhs/mutex-promise.git",
     "node-fetch": "^2.6.0",
     "redis-mock": "^0.49.0",
     "redlock": "^4.1.0",

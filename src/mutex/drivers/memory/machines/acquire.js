@@ -8,7 +8,7 @@ module.exports = {
 
   async fn({ client, key }, exits) {
     const mutex = await client.getInstance(key).promise();
-    mutex.lock();
+    await mutex.lock();
 
     const unlock = () => Promise.resolve(mutex.unlock());
     return exits.success(unlock);

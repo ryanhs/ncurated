@@ -37,6 +37,9 @@ beforeAll(async () => {
   await sdk.enable_stream();
 });
 
+afterEach(() => sdk.stream && sdk.disable_stream());
+afterAll(() => sdk.stream && sdk.disable_stream());
+
 
 describe('check creating', () => {
 
@@ -69,7 +72,6 @@ describe('pub sub', () => {
     await sdk.disable_stream();
   });
 
-
   it('subscribe ok', () => new Promise((resolve) => {
     const channel = uuid();
 
@@ -82,8 +84,8 @@ describe('pub sub', () => {
           async next({ message }) {
             expect(message).toBeTruthy();
             subscription.unsubscribe();
-            resolve();
             await sdk.disable_stream();
+            resolve();
           },
         });
       })

@@ -23,6 +23,8 @@ beforeAll(async () => {
   acquire = (key) => acquireMachine({ sdk, client, key });
 });
 
+afterAll(() => client && client.redlock.quit());
+
 describe('just a test', () => {
   it('its working fine', async () => {
     const unlock = await acquire('a');

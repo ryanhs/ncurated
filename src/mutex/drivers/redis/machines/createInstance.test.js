@@ -15,6 +15,8 @@ beforeAll(async () => {
   client = await (Machine(createInstance))({ sdk });
 });
 
+afterAll(() => client && client.redlock.quit());
+
 describe('what a check, no need actually', () => {
   it('just a test', async () => {
     expect(client).toBeDefined();

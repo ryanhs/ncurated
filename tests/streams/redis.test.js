@@ -67,6 +67,7 @@ describe('check', () => {
       .then(() => Promise.delay(250))
       .then(() => sdk.stream.publish({ channel: 'eee', message: 'aa' }))
       .then(() => Promise.delay(1000)) // wait for error if subscriber overhelmed?
+      .then(() => subscription.unsubscribe())
       .then(resolve);
   }));
 

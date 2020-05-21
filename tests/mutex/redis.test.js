@@ -15,7 +15,10 @@ beforeAll(async () => {
   });
 });
 
-afterAll(() => jest.clearAllTimers());
+afterAll(async () => {
+  jest.clearAllTimers()
+  await sdk.disable_mutex();
+});
 
 describe('check', () => {
 

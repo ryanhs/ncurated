@@ -5,7 +5,7 @@ module.exports = {
   friendlyName: 'destroyInstance',
   description: 'destroyInstance function',
 
-  fn(_, exits) {
+  async fn({ client }, exits) {
     return exits.success(true);
   },
 };
