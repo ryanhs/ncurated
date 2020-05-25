@@ -14,7 +14,7 @@
     "bluebird": "3.7.2",
     "faker": "4.1.0",
     "machine": "15.2.2",
-    "redis-mock": "0.46.0",
+    "redis-mock": "0.49.0",
     "rxjs": "6.5.5",
     "uuid": "3.4.0"
   }
