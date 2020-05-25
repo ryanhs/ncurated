@@ -10,16 +10,16 @@
     "node": ">=8.11"
   },
   "devDependencies": {
-    "coveralls": "^3.1.0",
-    "dotenv": "^8.2.0",
-    "eslint": "^6.5.1",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jest": "^22.20.0",
-    "faker": "^4.1.0",
-    "jest": "^24.9.0",
-    "jest-fetch-mock": "^3.0.3",
-    "jest-json-schema": "^2.1.0"
+    "coveralls": "3.1.0",
+    "dotenv": "8.2.0",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb-base": "14.1.0",
+    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-jest": "22.21.0",
+    "faker": "4.1.0",
+    "jest": "24.9.0",
+    "jest-fetch-mock": "3.0.3",
+    "jest-json-schema": "2.1.0"
   },
   "scripts": {
     "start": "node --trace-warnings node_modules/.bin/jest --passWithNoTests --watch --runInBand --detectOpenHandles",
