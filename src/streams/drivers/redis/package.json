@@ -15,7 +15,7 @@
     "connection-string": "3.3.1",
     "faker": "4.1.0",
     "machine": "15.2.2",
-    "redis": "2.8.0",
+    "redis": "3.0.2",
     "rxjs": "6.5.5",
     "uuid": "3.4.0"
   }
