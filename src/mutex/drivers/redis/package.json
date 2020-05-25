@@ -17,6 +17,6 @@
     "mutex-promise": "0.1.0",
     "redis": "2.8.0",
     "redlock": "4.1.0",
-    "uuid": "3.4.0"
+    "uuid": "8.1.0"
   }
 }
