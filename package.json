@@ -17,7 +17,7 @@
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-jest": "22.21.0",
     "faker": "4.1.0",
-    "jest": "24.9.0",
+    "jest": "26.0.1",
     "jest-fetch-mock": "3.0.3",
     "jest-json-schema": "2.1.0"
   },
