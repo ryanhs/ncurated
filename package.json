@@ -15,7 +15,7 @@
     "eslint": "7.1.0",
     "eslint-config-airbnb-base": "14.1.0",
     "eslint-plugin-import": "2.20.2",
-    "eslint-plugin-jest": "22.21.0",
+    "eslint-plugin-jest": "23.13.1",
     "faker": "4.1.0",
     "jest": "24.9.0",
     "jest-fetch-mock": "3.0.3",
