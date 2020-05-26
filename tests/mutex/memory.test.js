@@ -17,11 +17,10 @@ beforeAll(async () => {
 
 afterAll(() => jest.clearAllTimers());
 
-beforeEach(() => sdk.enableMutex())
-afterEach(() => sdk.disableMutex())
+beforeEach(() => sdk.enableMutex());
+afterEach(() => sdk.disableMutex());
 
 describe('check', () => {
-
   it(`not overlap in random order`, async () => {
     const mutexKey = uuid();
 
@@ -48,29 +47,26 @@ describe('check', () => {
       // expect before
       expect(startedAt).toBeGreaterThan(now + shouldRunAfter);
 
-      return ({
+      return {
         createdAt,
         startedAt,
         finishedAt,
-      })
-    }
+      };
+    };
 
     // mutex not run in order, then we only make sure if its run after certain time
     await Promise.all([
-
       // #1 batch
       // called At                      id   run in (ms)    startedAt should be >=
-      Promise.delay(   1).then(() => run('1.1',    300,                  0)),
+      Promise.delay(1).then(() => run('1.1', 300, 0)),
       // Promise.delay( 100).then(() => run('1.2',    200,                300)),
       // Promise.delay( 200).then(() => run('1.3',    200,                300)),
-
 
       // #1 batch
       // called At                      id   run in (ms)    startedAt should be >=
       // Promise.delay( 800).then(() => run('2.1',    200,                800)),
       // Promise.delay( 900).then(() => run('2.2',    200,                800)),
       // Promise.delay(1000).then(() => run('2.3',    200,                800)),
-    ])
+    ]);
   });
-
 });

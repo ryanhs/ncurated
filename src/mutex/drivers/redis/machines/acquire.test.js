@@ -2,7 +2,7 @@ const Promise = require('bluebird');
 const Machine = require('machine');
 const createInstance = require('./createInstance');
 const acquireInstance = require('./acquire');
-const { bootstrap } = require('./../../../../');
+const { bootstrap } = require('../../../..');
 
 jest.useRealTimers();
 jest.setTimeout(20000);
@@ -18,7 +18,7 @@ beforeAll(async () => {
     MUTEX_DRIVER: 'redis',
     MUTEX_CONNECTION_STRING: 'redis://localhost:6379/0',
   });
-  client = await (Machine(createInstance))({ sdk });
+  client = await Machine(createInstance)({ sdk });
   const acquireMachine = Machine(acquireInstance);
   acquire = (key) => acquireMachine({ sdk, client, key });
 });
@@ -41,24 +41,25 @@ describe('just a test', () => {
     // history which worker finish first
     const finishers = [];
 
-    const run = (id, delay) => new Promise((resolve) => {
-      acquire('a-race').then((unlock) => {
-        setTimeout(() => {
-          const finishTag = {
-            worker: id,
-            time: (new Date()).toISOString(),
-            timestamp: Date.now(),
-            nextIn: `${(delay / 1000).toFixed(2)}s`,
-          };
+    const run = (id, delay) =>
+      new Promise((resolve) => {
+        acquire('a-race').then((unlock) => {
+          setTimeout(() => {
+            const finishTag = {
+              worker: id,
+              time: new Date().toISOString(),
+              timestamp: Date.now(),
+              nextIn: `${(delay / 1000).toFixed(2)}s`,
+            };
 
-          sdk.log.info(finishTag);
-          finishers.push(finishTag);
+            sdk.log.info(finishTag);
+            finishers.push(finishTag);
 
-          expect(1).toBe(1);
-          unlock().then(resolve);
-        }, delay);
+            expect(1).toBe(1);
+            unlock().then(resolve);
+          }, delay);
+        });
       });
-    });
 
     await Promise.all([
       Promise.delay(50).then(() => run(1, 550)), // must be first
@@ -70,5 +71,4 @@ describe('just a test', () => {
     expect(finishers[1].timestamp).toBeGreaterThan(finishers[0].timestamp + 500);
     expect(finishers[2].timestamp).toBeGreaterThan(finishers[0].timestamp + 500);
   });
-
 });

@@ -1,5 +1,5 @@
 const flaverr = require('flaverr');
-const contract = require('./../../_contracts/acquire');
+const contract = require('../../_contracts/acquire');
 
 module.exports = {
   ...contract,
@@ -21,7 +21,7 @@ module.exports = {
     const ttl = 30000; // 30s?
     const lock = await redlock.lock(key, ttl);
     const unlock = () => lock.unlock();
-    
+
     return exits.success(unlock);
   },
 };

@@ -40,9 +40,7 @@ beforeAll(async () => {
 afterEach(() => sdk.stream && sdk.disable_stream());
 afterAll(() => sdk.stream && sdk.disable_stream());
 
-
 describe('check creating', () => {
-
   it('enable stream without error', async () => {
     const streamPromise = sdk.enable_stream();
     await expect(streamPromise).resolves.toBeTruthy();
@@ -55,11 +53,9 @@ describe('check creating', () => {
     const stream = await sdk.enable_stream();
     await expect(stream.destroy()).resolves.not.toThrow();
   });
-
 });
 
 describe('pub sub', () => {
-
   it('publish without error', async () => {
     const channel = `test-${testId}-pub-without-error`;
 
@@ -72,80 +68,85 @@ describe('pub sub', () => {
     await sdk.disable_stream();
   });
 
-  it('subscribe ok', () => new Promise((resolve) => {
-    const channel = uuid();
+  it('subscribe ok', () =>
+    new Promise((resolve) => {
+      const channel = uuid();
 
-    sdk.enable_stream()
-      .then(() => createTopic(channel))
-      .then(() => {
-        // subscriber test
-        const { observable } = sdk.stream.makeObservable({ channel });
-        const subscription = observable.subscribe({
-          async next({ message }) {
-            expect(message).toBeTruthy();
-            subscription.unsubscribe();
-            await sdk.disable_stream();
-            resolve();
-          },
+      sdk
+        .enable_stream()
+        .then(() => createTopic(channel))
+        .then(() => {
+          // subscriber test
+          const { observable } = sdk.stream.makeObservable({ channel });
+          const subscription = observable.subscribe({
+            async next({ message }) {
+              expect(message).toBeTruthy();
+              subscription.unsubscribe();
+              await sdk.disable_stream();
+              resolve();
+            },
+          });
+        })
+        .then(() => Promise.delay(15000)) // -_- kafka get so long to start
+        .then(() => sdk.stream.publish({ channel, message: generateMessage() }));
+    }));
+
+  it('silent from other channel', () =>
+    new Promise((resolve) => {
+      const channel1 = `test-${testId}-silent-1`;
+      const channel2 = `test-${testId}-silent-2`;
+
+      let silentFn;
+      sdk
+        .enable_stream()
+        .then(() => Promise.all([createTopic(channel1), createTopic(channel2)]))
+        .then(async () => {
+          // subscriber test
+          silentFn = jest.fn();
+          const { observable } = sdk.stream.makeObservable({ channel: channel1 });
+          const subscription = observable.subscribe({ next: silentFn });
+
+          // run routines
+          await Promise.resolve()
+            .then(() => Promise.delay(15000))
+            .then(() => sdk.stream.publish({ channel: channel2, message: generateMessage() }));
+
+          // wait if message mixed?
+          Promise.delay(1000)
+            .then(() => expect(silentFn).not.toHaveBeenCalled())
+            .then(() => Promise.delay(2000))
+            .then(() => expect(silentFn).not.toHaveBeenCalled())
+            .then(() => Promise.delay(3000))
+            .then(() => expect(silentFn).not.toHaveBeenCalled())
+            .then(() => subscription.unsubscribe())
+            .then(resolve);
         });
-      })
-      .then(() => Promise.delay(15000)) // -_- kafka get so long to start
-      .then(() => sdk.stream.publish({ channel, message: generateMessage() }));
-  }));
+    }));
 
-  it('silent from other channel', () => new Promise((resolve) => {
-    const channel1 = `test-${testId}-silent-1`;
-    const channel2 = `test-${testId}-silent-2`;
+  it('overall', () =>
+    new Promise((resolve) => {
+      const channel = `test-${testId}-overall`;
+      const message = generateMessage();
 
-    let silentFn;
-    sdk.enable_stream()
-      .then(() => Promise.all([createTopic(channel1), createTopic(channel2)]))
-      .then(async () => {
-        // subscriber test
-        silentFn = jest.fn();
-        const { observable } = sdk.stream.makeObservable({ channel: channel1 });
-        const subscription = observable.subscribe({ next: silentFn });
+      sdk
+        .enable_stream()
+        .then(() => createTopic(channel))
+        .then(async () => {
+          // subscriber test
+          const { observable } = sdk.stream.makeObservable({ channel });
+          const subscription = observable.subscribe({
+            async next({ message: msg }) {
+              expect(msg).toBe(message);
+              subscription.unsubscribe();
+              await sdk.disable_stream();
+              resolve();
+            },
+          });
 
-        // run routines
-        await Promise.resolve()
-          .then(() => Promise.delay(15000))
-          .then(() => sdk.stream.publish({ channel: channel2, message: generateMessage() }));
-
-        // wait if message mixed?
-        Promise.delay(1000)
-          .then(() => expect(silentFn).not.toHaveBeenCalled())
-          .then(() => Promise.delay(2000))
-          .then(() => expect(silentFn).not.toHaveBeenCalled())
-          .then(() => Promise.delay(3000))
-          .then(() => expect(silentFn).not.toHaveBeenCalled())
-          .then(() => subscription.unsubscribe())
-          .then(resolve);
-      });
-  }));
-
-  it('overall', () => new Promise((resolve) => {
-    const channel = `test-${testId}-overall`;
-    const message = generateMessage();
-
-    sdk.enable_stream()
-      .then(() => createTopic(channel))
-      .then(async () => {
-        // subscriber test
-        const { observable } = sdk.stream.makeObservable({ channel });
-        const subscription = observable.subscribe({
-          async next({ message: msg }) {
-            expect(msg).toBe(message);
-            subscription.unsubscribe();
-            await sdk.disable_stream();
-            resolve();
-          },
+          // run routines
+          await Promise.resolve()
+            .then(() => Promise.delay(15000))
+            .then(() => sdk.stream.publish({ channel, message }));
         });
-
-        // run routines
-        await Promise.resolve()
-          .then(() => Promise.delay(15000))
-          .then(() => sdk.stream.publish({ channel, message }));
-      });
-  }));
-
+    }));
 });

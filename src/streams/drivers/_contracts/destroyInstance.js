@@ -14,7 +14,7 @@ module.exports = {
 
   exits: {
     success: {
-      description: 'stream client\'s connection released',
+      description: "stream client's connection released",
     },
     unknownError: {
       description: 'Unknown error occurred!',

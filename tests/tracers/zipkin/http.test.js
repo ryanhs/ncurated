@@ -14,11 +14,9 @@ beforeEach(async () => {
     ZIPKIN_ENABLE: true,
     ZIPKIN_DRIVER: 'http',
   });
-
 });
 
 describe('check http transport', () => {
-
   it('local process: static', async () => {
     fetch.resetMocks();
     fetch.doMock();

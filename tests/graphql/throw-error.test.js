@@ -14,7 +14,6 @@ beforeAll(async () => {
 });
 
 describe('check with throwError: true', () => {
-
   it('error on graphql', async () => {
     const mock = () => {
       // fetchMock.dontMock();
@@ -43,7 +42,7 @@ describe('check with throwError: true', () => {
 
     const query = gql`
       query {
-        albums(options: {paginate: { page: "dwa", limit: 2}}) {
+        albums(options: { paginate: { page: "dwa", limit: 2 } }) {
           data {
             id
             title
@@ -85,7 +84,7 @@ describe('check with throwError: true', () => {
 
     const query = gql`
       {
-        user (id: "fe") {
+        user(id: "fe") {
           id
           firstname
           age
@@ -95,7 +94,7 @@ describe('check with throwError: true', () => {
 
     mock();
     const response = sdk.graphql.query({ query, throwError: true });
-    await expect(response).rejects.toThrow(/expected/ig);
+    await expect(response).rejects.toThrow(/expected/gi);
   });
 
   it('error on networkError: 1', async () => {
@@ -106,7 +105,7 @@ describe('check with throwError: true', () => {
 
     const query = gql`
       {
-        user (id: 134123) {
+        user(id: 134123) {
           id
           firstname
           age
@@ -115,7 +114,7 @@ describe('check with throwError: true', () => {
     `;
 
     const response = sdk.graphql.query({ query, throwError: true });
-    await expect(response).rejects.toThrow(/Network error/ig);
+    await expect(response).rejects.toThrow(/Network error/gi);
   });
 
   it('error on networkError: dns', async () => {
@@ -126,7 +125,7 @@ describe('check with throwError: true', () => {
 
     const query = gql`
       {
-        user (id: 134123) {
+        user(id: 134123) {
           id
           firstname
           age
@@ -135,6 +134,6 @@ describe('check with throwError: true', () => {
     `;
 
     const response = sdk.graphql.query({ query, throwError: true });
-    await expect(response).rejects.toThrow(/Network error/ig);
+    await expect(response).rejects.toThrow(/Network error/gi);
   });
 });

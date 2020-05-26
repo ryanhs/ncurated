@@ -35,26 +35,30 @@ const def = {
       const stores = [];
 
       if (configs.CACHE_MEMORY_ENABLE) {
-        stores.push(cacheManager.caching({
-          store: 'memory',
-          max: configs.CACHE_MEMORY_MAX || 10000,
-          ttl: configs.CACHE_MEMORY_TTL || 60,
-        }));
+        stores.push(
+          cacheManager.caching({
+            store: 'memory',
+            max: configs.CACHE_MEMORY_MAX || 10000,
+            ttl: configs.CACHE_MEMORY_TTL || 60,
+          }),
+        );
       }
 
       let redisCache;
       if (configs.CACHE_REDIS_ENABLE) {
-        const redisUrl = (configs.CACHE_REDIS_URL)
+        const redisUrl = configs.CACHE_REDIS_URL
           ? configs.CACHE_REDIS_URL
           : new ConnectionString('', {
-            protocol: 'redis',
-            hosts: [{
-              name: configs.CACHE_REDIS_HOST,
-              port: parseInt(configs.CACHE_REDIS_PORT, 10),
-            }],
-            password: configs.CACHE_REDIS_PASS,
-            path: [String(parseInt(configs.CACHE_REDIS_DB, 10))],
-          }).toString();
+              protocol: 'redis',
+              hosts: [
+                {
+                  name: configs.CACHE_REDIS_HOST,
+                  port: parseInt(configs.CACHE_REDIS_PORT, 10),
+                },
+              ],
+              password: configs.CACHE_REDIS_PASS,
+              path: [String(parseInt(configs.CACHE_REDIS_DB, 10))],
+            }).toString();
 
         redisCache = cacheManager.caching({
           store: redisStore,
@@ -80,7 +84,7 @@ const def = {
     const cacher = createCacher();
 
     // a helper function to create new separated cache in a namespace
-    const namespaces = { };
+    const namespaces = {};
     cacher.namespace = (namespace) => {
       if (namespaces[namespace]) {
         return namespaces[namespace];
@@ -89,7 +93,6 @@ const def = {
       namespaces[namespace] = createCacher(namespace);
       return namespaces[namespace];
     };
-
 
     return exits.success(cacher);
   },

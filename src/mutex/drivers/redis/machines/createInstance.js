@@ -1,7 +1,7 @@
 const Promise = require('bluebird');
 const redis = require('redis');
 const Redlock = require('redlock');
-const contract = require('./../../_contracts/createInstance');
+const contract = require('../../_contracts/createInstance');
 
 Promise.promisifyAll(redis.RedisClient.prototype);
 Promise.promisifyAll(redis.Multi.prototype);
@@ -23,26 +23,23 @@ module.exports = {
 
     const redisClient = redis.createClient({ url: connectionString });
 
-    const redlock = new Redlock(
-      [redisClient],
-      {
-        // the expected clock drift; for more details
-        // see http://redis.io/topics/distlock
-        driftFactor: 0.01, // time in ms
+    const redlock = new Redlock([redisClient], {
+      // the expected clock drift; for more details
+      // see http://redis.io/topics/distlock
+      driftFactor: 0.01, // time in ms
 
-        // the max number of times Redlock will attempt
-        // to lock a resource before erroring
-        retryCount: 100,
+      // the max number of times Redlock will attempt
+      // to lock a resource before erroring
+      retryCount: 100,
 
-        // the time in ms between attempts
-        retryDelay: 200, // time in ms
+      // the time in ms between attempts
+      retryDelay: 200, // time in ms
 
-        // the max time in ms randomly added to retries
-        // to improve performance under high contention
-        // see https://www.awsarchitectureblog.com/2015/03/backoff.html
-        retryJitter: 200, // time in ms
-      },
-    );
+      // the max time in ms randomly added to retries
+      // to improve performance under high contention
+      // see https://www.awsarchitectureblog.com/2015/03/backoff.html
+      retryJitter: 200, // time in ms
+    });
 
     let healthy = true;
 

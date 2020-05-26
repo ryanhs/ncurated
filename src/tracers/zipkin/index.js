@@ -1,7 +1,5 @@
 const Machine = require('machine');
-const {
-  Tracer, ExplicitContext, BatchRecorder, jsonEncoder,
-} = require('zipkin');
+const { Tracer, ExplicitContext, BatchRecorder, jsonEncoder } = require('zipkin');
 const { HttpLogger } = require('zipkin-transport-http');
 
 const def = {
@@ -31,7 +29,6 @@ const def = {
   },
 
   async fn({ configs, sdk }, exits) {
-
     // default log just log.trace it
     let logger = {
       logSpan: (span) => sdk.log.trace({ log: 'zipkin-span', ...span }),
@@ -50,7 +47,6 @@ const def = {
       recorder: new BatchRecorder({ logger }),
       localServiceName: configs.APP_NAME,
     });
-
 
     sdk.log.info(`zipkip enabled with ${configs.ZIPKIN_DRIVER} driver`, {
       driver: configs.ZIPKIN_DRIVER,

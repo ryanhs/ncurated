@@ -11,7 +11,6 @@ beforeAll(async () => {
 afterAll(() => jest.clearAllTimers());
 
 describe('check custom', () => {
-
   it('has "custom"', async () => {
     await sdk.enable_stream('custom', {
       STREAM_DRIVER: 'redis-mock',
@@ -23,5 +22,4 @@ describe('check custom', () => {
     expect(sdk.streams.custom.connection).toBeTruthy();
     expect(Object.keys(sdk.streams).length).toBe(2); // + default = null
   });
-
 });

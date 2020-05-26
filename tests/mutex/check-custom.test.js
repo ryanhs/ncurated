@@ -11,7 +11,6 @@ beforeAll(async () => {
 afterAll(() => jest.clearAllTimers());
 
 describe('check custom', () => {
-
   it('has "custom-mutex" memory', async () => {
     await sdk.enable_mutex('custom-mutex', {
       MUTEX_DRIVER: 'memory',
@@ -23,5 +22,4 @@ describe('check custom', () => {
     expect(sdk.mutexes['custom-mutex'].connection).toBeTruthy();
     expect(Object.keys(sdk.mutexes).length).toBe(2); // + default = null
   });
-
 });

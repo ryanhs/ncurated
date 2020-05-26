@@ -8,12 +8,7 @@ module.exports = {
   description: 'Publish a message into stream.',
   sync: true,
 
-  fn({
-    client,
-    sdk,
-    channel,
-    message,
-  }, exits) {
+  fn({ client, sdk, channel, message }, exits) {
     const log = sdk.log.child({
       service: 'stream',
       driver: 'redis',
@@ -27,12 +22,11 @@ module.exports = {
 
     // publish message
     const pub = client.duplicate();
-    const promise = pub.publishAsync(channel, message)
-      .tap(() => {
-        // finish'em up
-        log.trace('message published!');
-        pub.quit();
-      });
+    const promise = pub.publishAsync(channel, message).tap(() => {
+      // finish'em up
+      log.trace('message published!');
+      pub.quit();
+    });
 
     // return promise and promise compatibility
     return exits.success({ promise, then: (...args) => promise.then(...args) });

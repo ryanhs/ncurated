@@ -14,7 +14,7 @@ module.exports = {
 
   exits: {
     success: {
-      description: 'mutex client\'s connection released',
+      description: "mutex client's connection released",
     },
     unknownError: {
       description: 'Unknown error occurred!',

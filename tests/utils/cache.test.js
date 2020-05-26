@@ -20,7 +20,6 @@ beforeAll(async () => {
 });
 
 describe('check cache oke', () => {
-
   it('cache a string', async () => {
     const foo = await cache.wrap('foo', () => Promise.resolve('foo'));
 
@@ -53,15 +52,15 @@ describe('check cache oke', () => {
 
         CACHE_REDIS_ENABLE: true,
         CACHE_REDIS_URL: process.env.REDIS_CONNECTION_STRING,
-
       },
       sdk: {
         log: bunyan.createLogger({ name: 'jest', streams: [] }),
       },
     });
 
-    expect(cache.redisCache.store.getClient().options.url)
-      .toBe(process.env.REDIS_CONNECTION_STRING);
+    expect(cache.redisCache.store.getClient().options.url).toBe(
+      process.env.REDIS_CONNECTION_STRING,
+    );
 
     return cache.redisCache.store.getClient().quit();
   });
@@ -99,7 +98,6 @@ describe('check cache oke', () => {
     return cache.redisCache.store.getClient().quit();
   });
 
-
   it('can create namespace and have different value', async () => {
     cache = await createCacher({
       configs: {
@@ -133,5 +131,4 @@ describe('check cache oke', () => {
     await expect(cache.namespace('posts').get('a')).resolves.toBe(undefined); // no more for posts
     await expect(cache.get('a')).resolves.toBe(1); // still 1 for default
   });
-
 });

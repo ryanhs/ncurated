@@ -1,5 +1,5 @@
 const Promise = require('bluebird');
-const contract = require('./../../_contracts/acquire');
+const contract = require('../../_contracts/acquire');
 
 module.exports = {
   ...contract,

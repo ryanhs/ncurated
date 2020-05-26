@@ -25,83 +25,85 @@ beforeAll(async () => {
 
 afterAll(() => sdk.disable_stream() && jest.clearAllTimers());
 
-
 describe('check', () => {
-
   it('publish without error', async () => {
     await sdk.stream.publish({ channel: uuid(), message: 'aa' }).promise;
+    expect(1).toBe(1);
   });
 
-  it('subscribe ok', () => new Promise((resolve) => {
-    const channel = uuid();
+  it('subscribe ok', () =>
+    new Promise((resolve) => {
+      const channel = uuid();
 
-    // subscriber test
-    const subscription = sdk.stream.makeObservable({ channel }).observable.subscribe({
-      next({ message }) {
-        expect(message).toBeTruthy();
-        subscription.unsubscribe();
-        resolve();
-      },
-    });
-
-    // send something
-    sdk.stream.publish({ channel, message: 'aa' });
-  }));
-
-  it('silent from other channel', () => new Promise((resolve) => {
-    // subscriber test
-    const subscription = sdk.stream.makeObservable({ channel: uuid() }).observable.subscribe({
-      next() {
-        subscription.unsubscribe();
-        throw flaverr({ code: 'E_STREAM_CROWDED' }, new Error('crowded!'));
-      },
-    });
-
-    // send something
-    (async () => {
-      await sdk.stream.publish({ channel: 'bbb', message: 'aa' });
-      await sdk.stream.publish({ channel: 'ccc', message: 'aa' });
-      await sdk.stream.publish({ channel: 'ddd', message: 'aa' });
-      await sdk.stream.publish({ channel: 'eee', message: 'aa' });
-      await sdk.stream.publish({ channel: 'ccc', message: 'aa' });
-      resolve();
-    })();
-
-  }));
-
-  it('overall test', () => new Promise((resolve) => {
-    expect.assertions(3);
-
-    const channel = uuid();
-
-    // subscriber
-    let messageCounter = 0;
-    const subscription = sdk.stream.makeObservable({ channel }).observable.subscribe({
-      next({ message }) {
-        messageCounter += 1;
-        expect(message).toBeTruthy();
-        if (messageCounter === 3) {
+      // subscriber test
+      const subscription = sdk.stream.makeObservable({ channel }).observable.subscribe({
+        next({ message }) {
+          expect(message).toBeTruthy();
           subscription.unsubscribe();
           resolve();
-        }
-      },
-    });
+        },
+      });
 
-    // publisher
-    const go = () => {
-      const message = generateMessage();
-      sdk.log.trace('sending...', { message });
-      return sdk.stream.publish({ channel, message }).promise;
-    };
+      // send something
+      sdk.stream.publish({ channel, message: 'aa' });
+    }));
 
-    // run routines
-    Promise.delay(25).then(go);
-    jest.advanceTimersByTime(150);
+  it('silent from other channel', () =>
+    new Promise((resolve) => {
+      // subscriber test
+      const subscription = sdk.stream.makeObservable({ channel: uuid() }).observable.subscribe({
+        next() {
+          subscription.unsubscribe();
+          expect(1).toBe(1);
+          throw flaverr({ code: 'E_STREAM_CROWDED' }, new Error('crowded!'));
+        },
+      });
 
-    Promise.delay(25).then(go);
-    jest.advanceTimersByTime(150);
+      // send something
+      (async () => {
+        await sdk.stream.publish({ channel: 'bbb', message: 'aa' });
+        await sdk.stream.publish({ channel: 'ccc', message: 'aa' });
+        await sdk.stream.publish({ channel: 'ddd', message: 'aa' });
+        await sdk.stream.publish({ channel: 'eee', message: 'aa' });
+        await sdk.stream.publish({ channel: 'ccc', message: 'aa' });
+        resolve();
+      })();
+    }));
 
-    Promise.delay(25).then(go);
-    jest.advanceTimersByTime(150);
-  }));
+  it('overall test', () =>
+    new Promise((resolve) => {
+      expect.assertions(3);
+
+      const channel = uuid();
+
+      // subscriber
+      let messageCounter = 0;
+      const subscription = sdk.stream.makeObservable({ channel }).observable.subscribe({
+        next({ message }) {
+          messageCounter += 1;
+          expect(message).toBeTruthy();
+          if (messageCounter === 3) {
+            subscription.unsubscribe();
+            resolve();
+          }
+        },
+      });
+
+      // publisher
+      const go = () => {
+        const message = generateMessage();
+        sdk.log.trace('sending...', { message });
+        return sdk.stream.publish({ channel, message }).promise;
+      };
+
+      // run routines
+      Promise.delay(25).then(go);
+      jest.advanceTimersByTime(150);
+
+      Promise.delay(25).then(go);
+      jest.advanceTimersByTime(150);
+
+      Promise.delay(25).then(go);
+      jest.advanceTimersByTime(150);
+    }));
 });

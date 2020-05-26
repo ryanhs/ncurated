@@ -12,7 +12,7 @@ const publish = Machine(publisherMachine);
 
 beforeAll(async () => {
   sdk = await bootstrap('production', { APP_NAME: 'jest', LOG_DEBUG_ENABLE: false });
-  client = await (Machine(createInstance))({
+  client = await Machine(createInstance)({
     sdk,
     connectionString: 'redis://127.0.0.1:6379/15',
   });
@@ -21,49 +21,56 @@ beforeAll(async () => {
 afterAll(() => client.quit());
 
 describe('check', () => {
+  it('publish a message', () =>
+    new Promise((resolve) => {
+      expect.assertions(1);
 
-  it('publish a message', () => new Promise((resolve) => {
-    expect.assertions(1);
+      // subscriber & check
+      const sub = client;
+      sub.on('message', (_, message) => {
+        expect(message).toBeTruthy();
+      });
+      sub.subscribe('a channel');
 
-    // subscriber & check
-    const sub = client;
-    sub.on('message', (_, message) => {
-      expect(message).toBeTruthy();
-    });
-    sub.subscribe('a channel');
+      // publisher
+      const req = publish({
+        client,
+        sdk,
+        channel: 'a channel',
+        message: 'foo bar',
+      }).now();
 
-    // publisher
-    const req = publish({
-      client, sdk, channel: 'a channel', message: 'foo bar',
-    }).now();
+      req.then(resolve);
+    }));
 
-    req.then(resolve);
-  }));
+  it('publish 2 messages', () =>
+    new Promise((resolve) => {
+      expect.assertions(6);
 
-  it('publish 2 messages', () => new Promise((resolve) => {
-    expect.assertions(6);
+      // subscriber & check
+      let i = 0;
+      const sub = client;
+      sub.on('message', (_, message) => {
+        expect(message).toBeTruthy();
+        expect(message).toEqual(expect.stringMatching(new RegExp(i + 1, 'g')));
+        i += 1;
 
-    // subscriber & check
-    let i = 0;
-    const sub = client;
-    sub.on('message', (_, message) => {
-      expect(message).toBeTruthy();
-      expect(message).toEqual(expect.stringMatching(new RegExp(i + 1, 'g')));
-      i += 1;
+        if (i > 1) {
+          resolve();
+        }
+      });
+      sub.subscribe('b channel');
 
-      if (i > 1) {
-        resolve();
-      }
-    });
-    sub.subscribe('b channel');
+      // publisher
+      const p = (message) =>
+        publish({
+          client,
+          sdk,
+          channel: 'b channel',
+          message,
+        }).now();
 
-    // publisher
-    const p = (message) => publish({
-      client, sdk, channel: 'b channel', message,
-    }).now();
-
-    p('foo bar 1');
-    p('foo bar 2');
-  }));
-
+      p('foo bar 1');
+      p('foo bar 2');
+    }));
 });

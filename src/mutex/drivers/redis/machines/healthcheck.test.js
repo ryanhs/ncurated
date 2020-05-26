@@ -1,7 +1,7 @@
 const Machine = require('machine');
 const createInstance = require('./createInstance');
 const healthcheckInstance = require('./healthcheck');
-const { bootstrap } = require('./../../../../');
+const { bootstrap } = require('../../../..');
 
 let sdk;
 let client;
@@ -13,7 +13,7 @@ beforeAll(async () => {
     MUTEX_DRIVER: 'redis',
     MUTEX_CONNECTION_STRING: 'redis://localhost:6379/0',
   });
-  client = await (Machine(createInstance))({ sdk });
+  client = await Machine(createInstance)({ sdk });
 });
 
 afterAll(() => client && client.redlock.quit());
@@ -26,5 +26,4 @@ describe('what a check, no need actually', () => {
     const check = healthcheck({ sdk, client });
     return expect(check).resolves.toBeTruthy();
   });
-
 });

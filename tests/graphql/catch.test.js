@@ -17,23 +17,20 @@ const responseSchema = {
   type: 'object',
   properties: {
     errors: {
-      items: [{
-        required: ['message'],
-      }],
+      items: [
+        {
+          required: ['message'],
+        },
+      ],
     },
     status: {
       type: 'integer',
     },
   },
-  required: [
-    'errors',
-    'data',
-    'status',
-  ],
+  required: ['errors', 'data', 'status'],
 };
 
 describe('check with throwError: false', () => {
-
   it('error on graphql', async () => {
     const mock = () => {
       // fetchMock.dontMock();
@@ -49,9 +46,7 @@ describe('check with throwError: false', () => {
                   column: 3,
                 },
               ],
-              path: [
-                'user',
-              ],
+              path: ['user'],
             },
           ],
           data: {
@@ -70,7 +65,7 @@ describe('check with throwError: false', () => {
 
     const query = gql`
       {
-        user (id: 134123) {
+        user(id: 134123) {
           id
           firstname
           age
@@ -89,9 +84,7 @@ describe('check with throwError: false', () => {
     const mock = () => {
       // fetchMock.dontMock();
       fetchMock.doMock();
-      fetchMock.mockResponses([
-        'just some error',
-      ]);
+      fetchMock.mockResponses(['just some error']);
     };
 
     await sdk.enable_graphql('default', {
@@ -103,7 +96,7 @@ describe('check with throwError: false', () => {
 
     const query = gql`
       {
-        user (id: 134123) {
+        user(id: 134123) {
           id
           firstname
           age
@@ -128,7 +121,7 @@ describe('check with throwError: false', () => {
 
     const query = gql`
       {
-        user (id: 134123) {
+        user(id: 134123) {
           id
           firstname
           age
@@ -152,7 +145,7 @@ describe('check with throwError: false', () => {
 
     const query = gql`
       {
-        user (id: 134123) {
+        user(id: 134123) {
           id
           firstname
           age

@@ -20,5 +20,4 @@ module.exports = {
       description: 'Unknown error occurred!',
     },
   },
-
 };

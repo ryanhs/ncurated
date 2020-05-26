@@ -3,16 +3,13 @@ const uuid = require('uuid').v4;
 const flaverr = require('flaverr');
 const contract = require('../../_contracts/publish');
 
-
 module.exports = {
   ...contract,
   friendlyName: 'publish',
   description: 'Publish a message into stream.',
   sync: true,
 
-  fn({
-    client, sdk, channel, message,
-  }, exits) {
+  fn({ client, sdk, channel, message }, exits) {
     const log = sdk.log.child({
       service: 'stream',
       driver: 'kafka',
@@ -26,12 +23,12 @@ module.exports = {
 
     // publish message
     const pub = client.singleton_producer;
-    const promise = Promise.resolve(pub.send({
-      topic: channel,
-      messages: [
-        { value: message },
-      ],
-    }))
+    const promise = Promise.resolve(
+      pub.send({
+        topic: channel,
+        messages: [{ value: message }],
+      }),
+    )
       .tap(() => {
         // finish'em up
         log.trace('message published!');

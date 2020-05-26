@@ -9,7 +9,7 @@ const healthcheck = Machine(healthcheckMachine);
 
 beforeAll(async () => {
   sdk = await bootstrap('production', { APP_NAME: 'jest', LOG_DEBUG_ENABLE: false });
-  client = await (Machine(createInstance))({ sdk });
+  client = await Machine(createInstance)({ sdk });
 });
 
 afterAll(() => client.quit());

@@ -19,7 +19,7 @@ const generateMessage = () => faker.lorem.sentence();
 beforeAll(async () => {
   jest.useRealTimers();
   sdk = await bootstrap('production', { APP_NAME: `jest-${testId}`, LOG_DEBUG_ENABLE: false });
-  client = await (Machine(createInstance))({
+  client = await Machine(createInstance)({
     sdk,
     connectionString: 'kafka://127.0.0.1:9092/',
   });
@@ -53,7 +53,10 @@ describe('check', () => {
         log.trace('sending', { message: `${message.substr(0, 10)}...` });
 
         const req = publish({
-          client, sdk, channel: topic, message,
+          client,
+          sdk,
+          channel: topic,
+          message,
         }).now();
         await expect(req).resolves.not.toThrow();
       };

@@ -120,14 +120,13 @@ const def = {
         stream: wrappedCloudwatch(),
       });
     }
-    
+
     // -------------------------------------------------------------------------
 
     // level of logs based on environment
     let level = 'info';
     if (configs.environment === 'production') level = 'info';
     if (configs.environment === 'development') level = 'trace';
-
 
     // create bunyan object
     const logger = Bunyan.createLogger({
@@ -138,13 +137,11 @@ const def = {
       src: configs.environment === 'development',
     });
 
-
     // expose some goods
     logger.ringBuffer = ringBuffer; // this the trick, to use ringBuffer object it self
 
     return exits.success(logger);
   },
 };
-
 
 module.exports = { createLogger: Machine(def) };

@@ -11,7 +11,7 @@ const destroy = Machine(destroyInstanceMachine);
 
 beforeAll(async () => {
   sdk = await bootstrap('production', { APP_NAME: 'jest' });
-  client = await (Machine(createInstance))({
+  client = await Machine(createInstance)({
     sdk,
     connectionString: 'kafka://127.0.0.1:9092/',
   });

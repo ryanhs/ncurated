@@ -9,11 +9,7 @@ module.exports = {
   description: 'Subscribe from stream with redis mock.',
   sync: true,
 
-  fn({
-    client,
-    sdk,
-    channel,
-  }, exits) {
+  fn({ client, sdk, channel }, exits) {
     const log = sdk.log.child({
       service: 'stream',
       driver: 'redis',
@@ -37,19 +33,21 @@ module.exports = {
       sub.unsubscribe();
       sub.quit();
     };
-    const selector = (channelNow, message) => ((channel === channelNow) ? message : undefined);
+    const selector = (channelNow, message) => (channel === channelNow ? message : undefined);
     const observable = fromEventPattern(onSubscribe, onUnsubscribe, selector)
       .pipe(filter((ev) => ev !== undefined))
-      .pipe(map((message) => {
-        const convertedMessage = {
-          partition: 0,
-          offset: Date.now(),
-          headers: {},
-          message,
-        };
-        log.trace('received!', convertedMessage);
-        return convertedMessage;
-      }));
+      .pipe(
+        map((message) => {
+          const convertedMessage = {
+            partition: 0,
+            offset: Date.now(),
+            headers: {},
+            message,
+          };
+          log.trace('received!', convertedMessage);
+          return convertedMessage;
+        }),
+      );
 
     // return
     return exits.success({ observable });

@@ -9,9 +9,7 @@ module.exports = {
   description: 'Subscribe from stream.',
   sync: true,
 
-  fn({
-    client, sdk, channel, partition, offset, fromBeginning,
-  }, exits) {
+  fn({ client, sdk, channel, partition, offset, fromBeginning }, exits) {
     const log = sdk.log.child({
       service: 'stream',
       driver: 'kafka',
@@ -36,7 +34,6 @@ module.exports = {
           await consumer.connect();
           await consumer.subscribe({ topic: channel, fromBeginning });
         }
-
 
         consumer.run({
           eachMessage: ({ partition: partitionMsg, message }) => {

@@ -13,12 +13,10 @@ beforeAll(async () => {
 afterAll(() => jest.clearAllTimers());
 
 describe('check', () => {
-
   it('has memory has defaults', async () => {
     await sdk.enable_mutex();
     expect(sdk.mutex).toBeTruthy();
     expect(sdk.mutexes.default).toBeTruthy();
     expect(Object.keys(sdk.mutexes).length).toBe(1);
   });
-
 });

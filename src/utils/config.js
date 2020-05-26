@@ -10,13 +10,14 @@ const envBoolean = (v) => {
   return v;
 };
 
-const envSDKOverride = () => Object.keys(process.env)
-  .filter((v) => v.substr(0, 4) === 'SDK_') // filter only sdk overrides
-  .reduce((o, v) => ({ ...o, [v.substr(4)]: envBoolean(process.env[v]) }), {});
+const envSDKOverride = () =>
+  Object.keys(process.env)
+    .filter((v) => v.substr(0, 4) === 'SDK_') // filter only sdk overrides
+    .reduce((o, v) => ({ ...o, [v.substr(4)]: envBoolean(process.env[v]) }), {});
 
 const parseConfig = (environment = 'production', configOverrides = {}, useEnv = true) => {
   const env = useEnv ? envSDKOverride() : {};
-  
+
   const config = {
     ...defaultConfigsAvailable[environment],
     ...env,

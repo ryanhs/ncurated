@@ -8,9 +8,7 @@ const flaverr = require('flaverr');
 const _ = require('lodash');
 const qgl = require('graphql-tag');
 
-const makeRequest = ({
-  sdk, method, client, remoteServiceName, logger,
-}) => (configs) => {
+const makeRequest = ({ sdk, method, client, remoteServiceName, logger }) => (configs) => {
   const { withCache = false, cacheOptions = {}, throwError = true } = configs;
 
   const formatError = (err) => ({
@@ -33,10 +31,10 @@ const makeRequest = ({
 
     // auto translate if gql is string
     if (configs.query && typeof configs.query === 'string') {
-      configs.query = qgl(configs.query); // eslint-disable-line no-param-reassign
+      configs.query = qgl(configs.query);
     }
     if (configs.mutation && typeof configs.mutation === 'string') {
-      configs.mutation = qgl(configs.mutation); // eslint-disable-line no-param-reassign
+      configs.mutation = qgl(configs.mutation);
     }
 
     return client[method](configs)
@@ -49,15 +47,14 @@ const makeRequest = ({
         }
 
         log.trace('response success!');
-        return ({
+        return {
           status: 200,
           errors: response.errors || [],
           ...response,
           hash,
-        });
+        };
       })
       .catch((err) => {
-
         if (throwError) {
           // if there is more information
           if (Array.isArray(err.graphQLErrors) && err.graphQLErrors.length > 0) {
@@ -83,7 +80,7 @@ const makeRequest = ({
 
         log.trace('failed! UnknownError', err);
 
-        const originalErrors = (Array.isArray(err.graphQLErrors))
+        const originalErrors = Array.isArray(err.graphQLErrors)
           ? err.graphQLErrors.map(formatError)
           : [formatError(err)];
 
@@ -96,7 +93,6 @@ const makeRequest = ({
       });
   };
 
-
   if (withCache) {
     return sdk.cache.wrap(`${remoteServiceName}/${hash}`, () => sendRequest(), cacheOptions);
   }
@@ -105,9 +101,7 @@ const makeRequest = ({
 };
 
 module.exports = async ({
-  configs: {
-    defaultOptions = {}, url, uri, remoteServiceName = 'unnamed-remote-service',
-  },
+  configs: { defaultOptions = {}, url, uri, remoteServiceName = 'unnamed-remote-service' },
   sdk,
 }) => {
   const logger = sdk.log.child({
@@ -146,13 +140,20 @@ module.exports = async ({
 
   logger.info(`graphql: graphql enabled! ${remoteServiceName}`);
 
-
   return {
     query: makeRequest({
-      method: 'query', sdk, client, remoteServiceName, logger,
+      method: 'query',
+      sdk,
+      client,
+      remoteServiceName,
+      logger,
     }),
     mutate: makeRequest({
-      method: 'mutate', sdk, client, remoteServiceName, logger,
+      method: 'mutate',
+      sdk,
+      client,
+      remoteServiceName,
+      logger,
     }),
     client,
   };

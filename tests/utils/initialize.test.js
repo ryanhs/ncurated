@@ -41,5 +41,4 @@ describe('check initialize sdk', () => {
     expect(sdk1.configs.APP_NAME).toBe('first');
     expect(sdk2.configs.APP_NAME).toBe('second');
   });
-
 });

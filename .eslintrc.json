@@ -1,33 +1,41 @@
 {
-    "env": {
-        "commonjs": true,
-        "es6": true,
-        "node": true
-    },
-    "extends": [
-        "airbnb-base"
-    ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly",
-        "fetch": "readonly",
+  "env": {
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": ["airbnb-base", "plugin:jest/recommended", "plugin:prettier/recommended"],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly",
+    "fetch": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "plugins": ["jest"],
+  "rules": {
+    "camelcase": "off",
+    "no-console": "warn",
+    "no-trailing-spaces": "off",
+    "global-require": "off",
+    "padded-blocks": "off",
+    "no-unused-vars": "warn",
+    "no-param-reassign": ["error", { "props": false }],
+    "radix": "warn",
+    "max-len": ["error", 100],
+    "prettier/prettier": ["error"]
+  },
+  "overrides": [
+    {
+      "files": ["./tests/**/*.js"],
+      "rules": {
+        "max-len": ["error", 100],
+        "no-unused-vars": "off"
+      },
+      "globals": {
         "fetchMock": "readonly"
-    },
-    "parserOptions": {
-        "ecmaVersion": 2018
-    },
-    "plugins": ["jest"],
-    "rules": {
-      "no-console": "off",
-      "no-trailing-spaces": "off",
-      "padded-blocks": "off",
-      "no-unused-vars": "warn",
-      "radix": "warn"
-    },
-    "overrides": [
-      {
-        "files": ["**/*.test.js"],
-        "extends": ["plugin:jest/recommended"]
       }
-    ]
+    }
+  ]
 }

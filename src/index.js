@@ -36,7 +36,6 @@ const defaultInstance = {
   graphqls: { default: null },
 };
 
-
 // ---------------------------------------------------------------------------
 
 // just a small decoration, also used for test binding :-)
@@ -52,9 +51,7 @@ async function enableMutex(name = 'default', configs) {
   const sdk = this; // -_-
 
   // only if default then try from sdk configs
-  const mergedConfigs = name === 'default'
-    ? (configs || sdk.configs)
-    : (configs || {});
+  const mergedConfigs = name === 'default' ? configs || sdk.configs : configs || {};
 
   const connection = await connectMutex({ configs: mergedConfigs, sdk });
   sdk.mutexes[name] = connection;
@@ -90,9 +87,7 @@ async function enableStream(name = 'default', configs) {
   const sdk = this; // -_-
 
   // only if default then try from sdk configs
-  const mergedConfigs = name === 'default'
-    ? (configs || sdk.configs)
-    : (configs || {});
+  const mergedConfigs = name === 'default' ? configs || sdk.configs : configs || {};
 
   const connection = await connectStream({ configs: mergedConfigs, sdk });
   sdk.streams[name] = connection;
@@ -162,8 +157,12 @@ async function disableGraphql(name = 'default') {
 
 // ---------------------------------------------------------------------------
 
-
-async function bootstrap(environment = 'production', configOverrides = {}, useEnv = true, overwriteGlobal = false) {
+async function bootstrap(
+  environment = 'production',
+  configOverrides = {},
+  useEnv = true,
+  overwriteGlobal = false,
+) {
   // create new instance
   const instance = _.cloneDeep(defaultInstance);
 
@@ -209,7 +208,6 @@ async function bootstrap(environment = 'production', configOverrides = {}, useEn
   // return nicely
   return instance;
 }
-
 
 // compatibility
 const getInstance = () => global.ncuratedSDK; // global instance for default usage

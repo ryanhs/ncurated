@@ -17,23 +17,20 @@ const responseSchema = {
   type: 'object',
   properties: {
     errors: {
-      items: [{
-        required: ['message'],
-      }],
+      items: [
+        {
+          required: ['message'],
+        },
+      ],
     },
     status: {
       type: 'integer',
     },
   },
-  required: [
-    'errors',
-    'data',
-    'status',
-  ],
+  required: ['errors', 'data', 'status'],
 };
 
 describe('success', () => {
-
   it('success query', async () => {
     const mock = () => {
       // fetchMock.dontMock();
@@ -206,7 +203,7 @@ describe('success', () => {
     });
 
     const mutation = gql`
-      mutation ( $input: CreatePostInput!) {
+      mutation($input: CreatePostInput!) {
         post: createPost(input: $input) {
           id
           title

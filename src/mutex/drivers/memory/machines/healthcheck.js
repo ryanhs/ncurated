@@ -1,4 +1,4 @@
-const contract = require('./../../_contracts/healthcheck');
+const contract = require('../../_contracts/healthcheck');
 
 module.exports = {
   ...contract,

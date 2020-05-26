@@ -1,6 +1,6 @@
 const Promise = require('bluebird');
 const MutexPromise = require('mutex-promise');
-const contract = require('./../../_contracts/createInstance');
+const contract = require('../../_contracts/createInstance');
 
 MutexPromise.Promise = Promise;
 

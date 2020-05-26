@@ -13,12 +13,10 @@ beforeAll(async () => {
 afterAll(() => jest.clearAllTimers());
 
 describe('check', () => {
-
   it('has defaults', async () => {
     await sdk.enable_stream();
     expect(sdk.stream).toBeTruthy();
     expect(sdk.streams.default).toBeTruthy();
     expect(Object.keys(sdk.streams).length).toBe(1);
   });
-
 });

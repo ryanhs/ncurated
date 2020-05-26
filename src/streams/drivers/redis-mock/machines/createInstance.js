@@ -6,7 +6,7 @@ module.exports = {
   ...contract,
   friendlyName: 'createInstance',
   description: 'Create stream driver with redis mock.',
-  
+
   fn({ sdk }, exits) {
     // notify to boot
     const log = sdk.log.child({

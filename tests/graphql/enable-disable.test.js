@@ -17,23 +17,20 @@ const responseSchema = {
   type: 'object',
   properties: {
     errors: {
-      items: [{
-        required: ['message'],
-      }],
+      items: [
+        {
+          required: ['message'],
+        },
+      ],
     },
     status: {
       type: 'integer',
     },
   },
-  required: [
-    'errors',
-    'data',
-    'status',
-  ],
+  required: ['errors', 'data', 'status'],
 };
 
 describe('success', () => {
-
   it('enable by name', async () => {
     const mock = () => {
       // fetchMock.dontMock();

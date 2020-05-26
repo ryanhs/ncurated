@@ -1,6 +1,6 @@
 const Machine = require('machine');
 const createInstance = require('./createInstance');
-const { bootstrap } = require('./../../../../');
+const { bootstrap } = require('../../../..');
 
 let sdk;
 let client;
@@ -12,7 +12,7 @@ beforeAll(async () => {
     MUTEX_DRIVER: 'redis',
     MUTEX_CONNECTION_STRING: 'redis://localhost:6379/0',
   });
-  client = await (Machine(createInstance))({ sdk });
+  client = await Machine(createInstance)({ sdk });
 });
 
 afterAll(() => client && client.redlock.quit());
@@ -24,5 +24,4 @@ describe('what a check, no need actually', () => {
     expect(client).toHaveProperty('redisClient');
     expect(client).toHaveProperty('redlock');
   });
-
 });

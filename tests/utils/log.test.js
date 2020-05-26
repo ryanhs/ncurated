@@ -19,7 +19,6 @@ describe('test logger', () => {
   checkMethod('error');
 });
 
-
 describe('test logger ringBuffer', () => {
   const checkMethod = (method) => {
     it(`it produce to ringBuffer when put level: ${method}`, async () => {

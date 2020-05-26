@@ -1,4 +1,4 @@
-const contract = require('./../../_contracts/destroyInstance');
+const contract = require('../../_contracts/destroyInstance');
 
 module.exports = {
   ...contract,
