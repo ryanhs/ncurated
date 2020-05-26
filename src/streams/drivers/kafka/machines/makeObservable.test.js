@@ -55,7 +55,7 @@ const createTopic = async (channel) => {
 
 describe('check', () => {
   it('able to subscribe', () => {
-    const channel = `test-${testId}`;
+    const channel = `testsubscribe-${testId}`;
     return createTopic(channel).then(
       () =>
         new Promise((resolve) => {
@@ -80,32 +80,39 @@ describe('check', () => {
           Promise.delay(5205).then(() => sendSomething(channel));
           Promise.delay(5405).then(() => sendSomething(channel));
           Promise.delay(5605).then(() => sendSomething(channel));
-          Promise.delay(5805).then(() => sendSomething(channel));
+          // Promise.delay(5805).then(() => sendSomething(channel));
         }),
     );
   });
 
-  it('not mixed channel', () => {
+  it.only('not mixed channel', async () => {
     const channel1 = `test-${testId}-crowd1`;
     const channel2 = `test-${testId}-crowd2`;
-    return Promise.all([createTopic(channel1), createTopic(channel2)]).then(async () => {
-      // const log = sdk.log.child({ worker: 'testing' });
 
-      // im not listening to anything
-      const next = jest.fn();
-      const s = makeObservable({ client, sdk, channel: channel2 })
-        .now()
-        .observable.subscribe({ next });
+    const mock = jest.fn();
 
-      // send to channel1
-      await Promise.delay(25).then(() => sendSomething(channel1));
-      await Promise.delay(25).then(() => sendSomething(channel1));
-      await Promise.delay(1000);
-      await Promise.delay(2000);
-      await Promise.delay(3000);
-      expect(next).not.toHaveBeenCalled();
-      s.unsubscribe();
-    });
+    await Promise.all([createTopic(channel1), createTopic(channel2)]);
+
+    const s = makeObservable({ client, sdk, channel: channel2 })
+      .now()
+      .observable
+      .subscribe({ next: () => mock() });
+
+    await Promise.delay(25)
+    await sendSomething(channel1);
+    await Promise.delay(25)
+    await sendSomething(channel2);
+
+    // make sure in next 10s
+    await (new Promise(resolve => {
+      setTimeout(() => {
+        expect(mock).not.toHaveBeenCalled()
+
+        s.unsubscribe();
+        resolve();
+      }, 10000)
+    }))
+
   });
 
   it('fromBeginning ok', async () => {
