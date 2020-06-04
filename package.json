@@ -65,6 +65,6 @@
     "uuid": "^8.0.0",
     "zipkin": "^0.21.0",
     "zipkin-instrumentation-fetch": "^0.21.0",
-    "zipkin-transport-http": "^0.21.0"
+    "zipkin-transport-http": "^0.22.0"
   }
 }
