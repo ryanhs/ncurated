@@ -59,6 +59,7 @@
     "machine": "^15.2.2",
     "mutex-promise": "https://github.com/ryanhs/mutex-promise.git",
     "node-fetch": "^2.6.0",
+    "redis": "^3.0.2",
     "redis-mock": "^0.49.0",
     "redlock": "^4.1.0",
     "rxjs": "^6.5.5",
