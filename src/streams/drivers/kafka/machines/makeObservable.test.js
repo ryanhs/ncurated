@@ -95,24 +95,22 @@ describe('check', () => {
 
     const s = makeObservable({ client, sdk, channel: channel2 })
       .now()
-      .observable
-      .subscribe({ next: () => mock() });
+      .observable.subscribe({ next: () => mock() });
 
-    await Promise.delay(25)
+    await Promise.delay(25);
     await sendSomething(channel1);
-    await Promise.delay(25)
+    await Promise.delay(25);
     await sendSomething(channel2);
 
     // make sure in next 10s
-    await (new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(() => {
-        expect(mock).not.toHaveBeenCalled()
+        expect(mock).not.toHaveBeenCalled();
 
         s.unsubscribe();
         resolve();
-      }, 10000)
-    }))
-
+      }, 10000);
+    });
   });
 
   it('fromBeginning ok', async () => {

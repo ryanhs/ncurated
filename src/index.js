@@ -157,12 +157,7 @@ async function disableGraphql(name = 'default') {
 
 // ---------------------------------------------------------------------------
 
-async function bootstrap(
-  environment = 'production',
-  configOverrides = {},
-  useEnv = true,
-  overwriteGlobal = false,
-) {
+async function bootstrap(environment = 'production', configOverrides = {}, useEnv = true, overwriteGlobal = false) {
   // create new instance
   const instance = _.cloneDeep(defaultInstance);
 

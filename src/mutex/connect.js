@@ -1,4 +1,5 @@
 const flaverr = require('flaverr');
+const bluebird = require('bluebird');
 const DriverMemory = require('./drivers/memory');
 const DriverRedis = require('./drivers/redis');
 
@@ -60,6 +61,18 @@ module.exports = async ({ configs, sdk }) => {
     // main methods
     acquire: (args) => connection.acquire(args),
     destroy: () => connection.destroyInstance(),
+
+    wrap: async (args, fn) => {
+      const unlock = await connection.acquire(args);
+
+      return bluebird
+        .resolve(fn())
+        .tap(unlock)
+        .catch(async (err) => {
+          await unlock();
+          throw err;
+        });
+    },
 
     // dig deeper
     connection,

@@ -24,18 +24,7 @@ module.exports = {
   friendlyName: 'createInstance',
   description: 'Create stream driver with kafka',
 
-  fn(
-    {
-      sdk,
-      connectionString,
-      sslEnable = false,
-      sslRejectUnauthorized,
-      sslCaFile,
-      sslKeyFile,
-      sslCertFile,
-    },
-    exits,
-  ) {
+  fn({ sdk, connectionString, sslEnable = false, sslRejectUnauthorized, sslCaFile, sslKeyFile, sslCertFile }, exits) {
     // notify to boot
     const log = sdk.log.child({
       service: 'stream',

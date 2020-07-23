@@ -58,9 +58,7 @@ describe('check cache oke', () => {
       },
     });
 
-    expect(cache.redisCache.store.getClient().options.url).toBe(
-      process.env.REDIS_CONNECTION_STRING,
-    );
+    expect(cache.redisCache.store.getClient().options.url).toBe(process.env.REDIS_CONNECTION_STRING);
 
     return cache.redisCache.store.getClient().quit();
   });
