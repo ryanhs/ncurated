@@ -54,7 +54,7 @@
     "flaverr": "^1.10.0",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
-    "kafkajs": "^1.12.0",
+    "kafkajs": "https://github.com/ryanhs/kafkajs/archive/v1.11.0-fixencoder.tar.gz",
     "lodash": "^4.17.15",
     "machine": "^15.2.2",
     "mutex-promise": "https://github.com/ryanhs/mutex-promise.git",
