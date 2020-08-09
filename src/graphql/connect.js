@@ -56,13 +56,9 @@ const makeRequest = ({ sdk, method, client, remoteServiceName, logger }) => (con
       })
       .catch((err) => {
         if (throwError) {
-          // if there is more information
-          if (Array.isArray(err.graphQLErrors) && err.graphQLErrors.length > 0) {
-            throw flaverr(_.pick(err.graphQLErrors[0], ['code', 'httpStatusCode', 'locations', 'path']), err);
-          }
-
-          // else just throw error
-          throw err;
+          // if there is more information use graphQLErrors[0];
+          const whichError = (Array.isArray(err.graphQLErrors) && err.graphQLErrors.length > 0) ? err.graphQLErrors[0] : err;
+          throw flaverr({..._.pick(whichError, ['code', 'httpStatusCode', 'locations'])}, new Error(whichError.message.toString()));
         }
 
         if (err.networkError) {
