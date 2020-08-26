@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "bluebird": "3.7.2",
-    "faker": "4.1.0",
+    "faker": "5.1.0",
     "flaverr": "1.10.0",
     "machine": "15.2.2",
     "mutex-promise": "0.1.0",
