@@ -1,5 +1,8 @@
-const Promise = require('bluebird');
+const AsyncLock = require('async-lock');
+const bluebird = require('bluebird');
 const contract = require('../../_contracts/acquire');
+
+const lock = new AsyncLock({ Promise: bluebird }); // Bluebird
 
 module.exports = {
   ...contract,
@@ -7,10 +10,9 @@ module.exports = {
   description: 'acquire function',
 
   async fn({ client, key }, exits) {
-    const mutex = await client.getInstance(key).promise();
-    await mutex.lock();
-
-    const unlock = () => Promise.resolve(mutex.unlock());
-    return exits.success(unlock);
+    const acquire = new Promise((resolve) => {
+      lock.acquire(key, (done) => resolve(() => done()));
+    });
+    return exits.success(await acquire);
   },
 };
