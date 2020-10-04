@@ -10,7 +10,7 @@
     ]
   },
   "dependencies": {
-    "async-lock": "^1.2.4",
+    "async-lock": "1.2.4",
     "bluebird": "3.7.2",
     "faker": "4.1.0",
     "machine": "15.2.2",
