@@ -9,7 +9,7 @@ module.exports = {
   friendlyName: 'acquire',
   description: 'acquire function',
 
-  async fn({ client, key }, exits) {
+  async fn({ key }, exits) {
     const acquire = new Promise((resolve) => {
       lock.acquire(key, (done) => resolve(() => done()));
     });

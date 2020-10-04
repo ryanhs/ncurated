@@ -85,7 +85,7 @@ describe('check', () => {
     );
   });
 
-  it.only('not mixed channel', async () => {
+  it('not mixed channel', async () => {
     const channel1 = `test-${testId}-crowd1`;
     const channel2 = `test-${testId}-crowd2`;
 

@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const flaverr = require('flaverr');
 const _ = require('lodash');
 const qgl = require('graphql-tag');
+const bluebird = require('bluebird');
 
 const makeRequest = ({ sdk, method, client, remoteServiceName, logger }) => (configs) => {
   const { withCache = false, cacheOptions = {}, throwError = true } = configs;
@@ -57,8 +58,12 @@ const makeRequest = ({ sdk, method, client, remoteServiceName, logger }) => (con
       .catch((err) => {
         if (throwError) {
           // if there is more information use graphQLErrors[0];
-          const whichError = (Array.isArray(err.graphQLErrors) && err.graphQLErrors.length > 0) ? err.graphQLErrors[0] : err;
-          throw flaverr({..._.pick(whichError, ['code', 'httpStatusCode', 'locations'])}, new Error(whichError.message.toString()));
+          const whichError =
+            Array.isArray(err.graphQLErrors) && err.graphQLErrors.length > 0 ? err.graphQLErrors[0] : err;
+          throw flaverr(
+            { ..._.pick(whichError, ['code', 'httpStatusCode', 'locations']) },
+            new Error(whichError.message.toString()),
+          );
         }
 
         if (err.networkError) {
@@ -87,10 +92,10 @@ const makeRequest = ({ sdk, method, client, remoteServiceName, logger }) => (con
   };
 
   if (withCache) {
-    return sdk.cache.wrap(`${remoteServiceName}/${hash}`, () => sendRequest(), cacheOptions);
+    return bluebird.resolve(sdk.cache.wrap(`${remoteServiceName}/${hash}`, () => sendRequest(), cacheOptions));
   }
 
-  return sendRequest();
+  return bluebird.resolve(sendRequest());
 };
 
 module.exports = async ({
