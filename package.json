@@ -51,7 +51,7 @@
     "bunyan-teams": "^1.0.1",
     "cache-manager": "^3.3.0",
     "cache-manager-redis-store": "^2.0.0",
-    "connection-string": "^3.2.2",
+    "connection-string": "^4.0.0",
     "flaverr": "^1.10.0",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
