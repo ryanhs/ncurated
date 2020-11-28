@@ -22,7 +22,7 @@
     "jest": "26.0.1",
     "jest-fetch-mock": "3.0.3",
     "jest-json-schema": "2.1.0",
-    "prettier": "2.0.5"
+    "prettier": "2.2.1"
   },
   "scripts": {
     "start": "node --trace-warnings node_modules/.bin/jest --passWithNoTests --watch --runInBand --detectOpenHandles",
