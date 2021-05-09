@@ -15,7 +15,7 @@
     "flaverr": "1.10.0",
     "machine": "15.2.2",
     "mutex-promise": "0.1.0",
-    "redis": "3.0.2",
+    "redis": "3.1.1",
     "redlock": "4.1.0",
     "uuid": "8.1.0"
   }
