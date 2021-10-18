@@ -2,7 +2,7 @@ dist: bionic
 language: node_js
 cache: npm
 node_js:
-- "10.16"
+- "10.24"
 - "12"
 - "14"
 
