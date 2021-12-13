@@ -1,6 +1,6 @@
 {
   "name": "ncurated",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "my curated list of packages most used for microservices",
   "main": "src/index.js",
   "repository": "https://github.com/ryanhs/ncurated",
