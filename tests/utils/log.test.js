@@ -42,3 +42,35 @@ describe('test logger ringBuffer', () => {
   checkMethod('warn');
   checkMethod('error');
 });
+
+describe('az bunyan test', () => {
+  const checkMethod = (method) => {
+    it(`it produce to ringBuffer when put level: ${method}`, async () => {
+      const log = await createLogger({
+        configs: {
+          ...defaultConfig,
+          APP_NAME: 'jest',
+
+          LOG_AZURETABLESTORAGE_ENALBE: true,
+          LOG_AZURETABLESTORAGE_LEVEL: 'trace',
+          LOG_AZURETABLESTORAGE_TABLENAME: 'na....logs',
+          LOG_AZURETABLESTORAGE_CONNECTIONSTRING: 'D....indows.net',
+        },
+      });
+
+      // info
+      log[method](`test for ${method}`);
+      expect(log.ringBuffer.records[0]).toMatchObject({
+        msg: expect.stringMatching(new RegExp(method, 'ig')),
+      });
+
+      expect(log).toHaveProperty(method);
+      expect(log[method]).toBeInstanceOf(Function);
+    });
+  };
+
+  checkMethod('trace');
+  checkMethod('info');
+  checkMethod('warn');
+  checkMethod('error');
+});

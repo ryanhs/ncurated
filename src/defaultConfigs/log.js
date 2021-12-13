@@ -17,6 +17,11 @@ module.exports = {
     LOG_CLOUDWATCH_LEVEL: 'error',
     LOG_CLOUDWATCH_GROUP_NAME: '',
     LOG_CLOUDWATCH_STREAM_NAME: '',
+
+    LOG_AZURETABLESTORAGE_ENALBE: false,
+    LOG_AZURETABLESTORAGE_LEVEL: 'error',
+    LOG_AZURETABLESTORAGE_TABLENAME: 'sometableforlogs',
+    LOG_AZURETABLESTORAGE_CONNECTIONSTRING: 'DefaultEndpointsProtocol=https;AccountName=storageAccountName;AccountKey=storageAccoutnKey;',
   },
   development: {
     LOG_STDOUT_ENABLE: false,

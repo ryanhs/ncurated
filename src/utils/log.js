@@ -4,6 +4,7 @@ const DebugStream = require('bunyan-debug-stream');
 const Slack = require('bunyan-slack');
 const Teams = require('bunyan-teams');
 const Cloudwatch = require('bunyan-cloudwatch');
+const AzBunyan = require('az-bunyan');
 
 const def = {
   friendlyName: 'LoggerCreator',
@@ -119,6 +120,23 @@ const def = {
         level: configs.LOG_CLOUDWATCH_LEVEL,
         stream: wrappedCloudwatch(),
       });
+    }
+
+    // -------------------------------------------------------------------------
+
+    // push to azure blob storage
+    if (configs.LOG_AZURETABLESTORAGE_ENALBE) {
+      streams.push(AzBunyan.createTableStorageStream(configs.LOG_AZURETABLESTORAGE_LEVEL, {
+          connectionString: configs.LOG_AZURETABLESTORAGE_CONNECTIONSTRING,
+          tableName: configs.LOG_AZURETABLESTORAGE_TABLENAME
+      }));
+      // streams.push({
+      //   level: configs.LOG_AZURETABLESTORAGE_LEVEL,
+      //   stream: AzBunyan.createTableStorageStream(configs.LOG_AZURETABLESTORAGE_LEVEL, {
+      //       connectionString: configs.LOG_AZURETABLESTORAGE_CONNECTIONSTRING,
+      //       tableName: configs.LOG_AZURETABLESTORAGE_TABLENAME
+      //   }),
+      // });
     }
 
     // -------------------------------------------------------------------------
