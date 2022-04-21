@@ -22,6 +22,13 @@ module.exports = {
     LOG_AZURETABLESTORAGE_LEVEL: 'error',
     LOG_AZURETABLESTORAGE_TABLENAME: 'sometableforlogs',
     LOG_AZURETABLESTORAGE_CONNECTIONSTRING: 'DefaultEndpointsProtocol=https;AccountName=storageAccountName;AccountKey=storageAccoutnKey;',
+
+    LOG_SENTRY_ENABLE: false,
+    LOG_SENTRY_LEVEL: "info",
+    LOG_SENTRY_DSN: "https://somekey@domain.dev.id/12",
+    LOG_SENTRY_TRACESSAMPLERATE: "1.0",
+    LOG_SENTRY_ENVIRONMENT: "production",
+    LOG_SENTRY_INIT: false, // already init
   },
   development: {
     LOG_STDOUT_ENABLE: false,

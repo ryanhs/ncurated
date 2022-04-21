@@ -1,3 +1,5 @@
+const omit = require('lodash.omit');
+const jsonStringify = require('fast-json-stable-stringify');
 const Machine = require('machine');
 const Bunyan = require('bunyan');
 const DebugStream = require('bunyan-debug-stream');
@@ -5,6 +7,8 @@ const Slack = require('bunyan-slack');
 const Teams = require('bunyan-teams');
 const Cloudwatch = require('bunyan-cloudwatch');
 const AzBunyan = require('az-bunyan');
+const Sentry = require("@sentry/node");
+
 
 const def = {
   friendlyName: 'LoggerCreator',
@@ -137,6 +141,70 @@ const def = {
       //       tableName: configs.LOG_AZURETABLESTORAGE_TABLENAME
       //   }),
       // });
+    }
+
+    // -------------------------------------------------------------------------
+
+    // push to sentry storage
+    // LOG_SENTRY_ENABLE: false,
+    // LOG_SENTRY_LEVEL: "info",
+    // LOG_SENTRY_DSN: "https://xxxxxxxxxxxx@xxxxxxxxxxxxxx.id/12",
+    // LOG_SENTRY_TRACESSAMPLERATE: "1.0",
+    // LOG_SENTRY_ENVIRONMENT: "production",
+    function wrappedSentry() {
+      if (configs.LOG_SENTRY_INIT) {
+        Sentry.init({
+          serverName: configs.APP_NAME,
+          environment: configs.LOG_SENTRY_ENVIRONMENT || 'production',
+          dsn: configs.LOG_SENTRY_DSN,
+          tracesSampleRate: configs.LOG_SENTRY_TRACESSAMPLERATE, // log all for sdk
+          // debug: true,
+        });
+      }
+
+      // const scope = new Sentry.Scope();
+
+      return {
+        // simplify it, and using level name, instead of number for easier lookup
+        write: (entry) => {
+          let { level, error, err, tags, msg } = entry;
+          const levelName = ({
+            'error': Sentry.Severity.Error,
+            'warn': Sentry.Severity.Warning,
+            'info': Sentry.Severity.Info,
+            'debug': Sentry.Severity.Debug,
+            'trace': Sentry.Severity.Debug,
+          })[Bunyan.nameFromLevel[level]];
+          let cleanedContext = omit(entry, 'level', 'error', 'v', 'pid', 'err', 'tags', 'msg');
+
+          if (levelName === 'error') {
+
+            const context = {
+              extra: cleanedContext,
+              error: err || error,
+              level: 'error',
+            };
+            Sentry.captureMessage(msg, context);
+            // console.log('Sentry.captureMessage', msg, context);
+
+          } else {
+
+            const context = {
+              extra: cleanedContext,
+              level: levelName,
+            }
+            Sentry.captureMessage(msg, context);
+            // console.log('Sentry.captureMessage', msg, context);
+          }
+        },
+      };
+    }
+    if (configs.LOG_SENTRY_ENABLE) {
+      streams.push({
+        level: configs.LOG_SENTRY_LEVEL,
+        stream: wrappedSentry(),
+        type: 'raw',
+      });
     }
 
     // -------------------------------------------------------------------------

@@ -25,8 +25,10 @@
     "prettier": "2.0.5"
   },
   "scripts": {
-    "start": "node --trace-warnings node_modules/.bin/jest --passWithNoTests --watch --runInBand --detectOpenHandles",
-    "test": "node --trace-warnings node_modules/.bin/jest --passWithNoTests --coverage --runInBand --detectOpenHandles",
+    "start": "yarn test:watch",
+    "test:watch": "yarn test:basic --watch",
+    "test": "yarn test:basic --coverage",
+    "test:basic": "node --trace-warnings node_modules/.bin/jest --passWithNoTests --detectOpenHandles --runInBand",
     "lint": "eslint src/ tests/ --fix --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
     "coveralls:push": "cat ./coverage/lcov.info | coveralls",
     "node:version": "node --version"
@@ -38,6 +40,7 @@
     ]
   },
   "dependencies": {
+    "@sentry/node": "^6.19.6",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
     "apollo-link-http": "^1.5.17",
@@ -53,11 +56,13 @@
     "cache-manager": "^3.3.0",
     "cache-manager-redis-store": "^2.0.0",
     "connection-string": "^3.2.2",
+    "fast-json-stable-stringify": "^2.1.0",
     "flaverr": "^1.10.0",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
     "kafkajs": "https://github.com/ryanhs/kafkajs/archive/v1.11.0-fixencoder.tar.gz",
     "lodash": "^4.17.15",
+    "lodash.omit": "^4.5.0",
     "machine": "^15.2.2",
     "mutex-promise": "https://github.com/ryanhs/mutex-promise.git",
     "node-fetch": "^2.6.0",
