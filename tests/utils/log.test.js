@@ -75,7 +75,7 @@ describe.skip('az bunyan test', () => {
   checkMethod('error');
 });
 
-describe('sentry test', () => {
+describe.skip('sentry test', () => {
   const checkMethod = (method, context = {}) => {
     it(`it sent to sentry when put level: ${method}`, async () => {
       const log = await createLogger({
@@ -93,7 +93,7 @@ describe('sentry test', () => {
       });
 
       // info
-      log[method](context, `test 1101 for ${method}`);
+      log[method](context, `test 1111 for ${method}`);
       expect(log.ringBuffer.records[0]).toMatchObject({
         msg: expect.stringMatching(new RegExp(method, 'ig')),
       });
